@@ -13,7 +13,11 @@ return Application::configure(basePath: dirname(__DIR__))
         
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->alias([
+            "isSuperAdminOrAdmin" => App\Http\Middleware\isSuperAdminOrAdmin::class,
+            "createAdminOrEmp" => App\Http\Middleware\CreateAdminOrEmp::class,
+            "checkRole" => App\Http\Middleware\checkRole::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

@@ -61,6 +61,12 @@ class PostController extends Controller
     {
         try{
             $post = Post::find($id);
+            if(!$post){
+                return response()->json([
+                    'status' => 'fail',
+                    'message' => 'this post not exists'
+                ]);
+            }
             return response()->json([
                 'status' => 'success',
                 'post' => $post

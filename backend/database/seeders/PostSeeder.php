@@ -23,7 +23,8 @@ class PostSeeder extends Seeder
                 'arrivalTime' => '08:00'
             ]
         ];
-
-        Post::insert($posts);
+        foreach($posts as $post){
+            Post::create($post);
+        }
     }
 }

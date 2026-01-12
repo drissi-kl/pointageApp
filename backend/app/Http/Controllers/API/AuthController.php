@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Employee;
+use App\Models\Post;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -20,6 +21,7 @@ class AuthController extends Controller
         //
     }
 
+
     /**
      * Register a newly created only super admin.
      */
@@ -32,20 +34,92 @@ class AuthController extends Controller
                 "role"=>"required",
             ]);
 
+            if($formFields['role'] != "superadmin"){
+                return response()->json([
+                    'status' => 'fail',
+                    "message" => 'role must be superadmin'
+                ]);
+            }
+
             $user = User::create($formFields);
-
-
+            
 
             return response()->json([
-                    "status" => "success",
-                    "message" => "create super admin ".$user->name." successful"
-                ]);
+                "status" => "success",
+                "message" => "create super admin ".$user->name." successful"
+            ]);
 
         }catch(Exception $e){
             return response()->json([
-                    "status" => "error",
-                    "message" => $e->getMessage()
+                "status" => "error",
+                "message" => $e->getMessage()
+            ]);
+        }
+    }
+
+
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        try{
+            $formFields = $request->validate([
+                "name"=>'required|string',
+                "email"=>'required|email',
+                "password"=>"required|confirmed",
+                "role"=>"required|in:admin,employee"
+            ]);
+
+            $user = User::where('email', $formFields['email'])->first();
+            if($user){
+                return response()->json([
+                    "status" => "fail",
+                    "message" => "this email elready exists, user other"
                 ]);
+            }
+
+            $formFields['password'] = Hash::make($formFields['password']);
+
+            if($formFields['role'] == "employee"){
+
+                if(!$request->filled('code')){
+                    return response()->json([
+                        "status" => "fail",
+                        "message" => "for create an employee, must be exists a code for scan"
+                    ]);
+                }
+                if(!$request->filled('post_id')){
+                    return response()->json([
+                        "status" => "fail",
+                        "message" => "for create an employee must be selected any post that he belongs"
+                    ]);
+                }
+                
+                $user = User::create($formFields);
+                $formFields['code'] = $request->input('code');
+                $formFields['post_id'] = $request->input('post_id');
+                $formFields['user_id'] = $user->id;
+                $employee = Employee::create($formFields);
+
+                return response()->json([
+                    "status" => "success",
+                    "message" => "create employee ".$user->name." success",
+                ]);
+            }else if($formFields['role'] == "admin" ){
+                $user = User::create($formFields);
+                return response()->json([
+                    "status" => "success",
+                    "message" => "create admin ".$user->name." success",
+                ]);
+            }
+
+        }catch(Exception $e){
+            return response()->json([
+                "status"=>"error",
+                "message"=>$e->getMessage()
+            ]);
         }
     }
 
@@ -81,75 +155,6 @@ class AuthController extends Controller
                     "status" => "error",
                     "message" => $e->getMessage()
                 ]);
-        }
-    }
-
-
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        try{
-            $formFields = $request->validate([
-                "name"=>'required|string',
-                "email"=>'required|email',
-                "password"=>"required|confirmed",
-                "role"=>"required|in:superadmin,admin,employee"
-            ]);
-
-            return $request->all();
-
-            $user = User::where('email', $formFields['email'])->first();
-            if($user){
-                return response()->json([
-                    "status" => "fail",
-                    "message" => "this email elready exists, user other"
-                ]);
-            }
-
-            $formFields['password'] = Hash::make($formFields['password']);
-
-            if($formFields['role'] == "employee"){
-
-                if(!$request->filled('code')){
-                    return response()->json([
-                        "status" => "fail",
-                        "message" => "for create an employee, must be exists a code for scan"
-                    ]);
-                }
-                if(!$request->filled('post_id')){
-                    return response()->json([
-                        "status" => "fail",
-                        "message" => "for create an employee must be selected any post that he belongs"
-                    ]);
-                }
-                $user = User::create($formFields);
-                $formFields['post_id'] = $request->input('post_id');
-                $formFields['code'] = $request->input('code');
-                $formFields['user_id'] = $user->id;
-                $employee = Employee::create($formFields);
-
-                return response()->json([
-                    "status" => "success",
-                    "message" => "create employee ".$user->name." success"
-                ]);
-            }else if($formFields['role'] == "admin" ){
-                $user = User::create($formFields);
-                return response()->json([
-                    "status" => "success",
-                    "message" => "create admin ".$user->name." success"
-                ]);
-            }
-
-
-
-        }catch(Exception $e){
-            return response()->json([
-                "status"=>"error",
-                "message"=>$e->getMessage()
-            ]);
         }
     }
 

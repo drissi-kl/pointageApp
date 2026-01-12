@@ -10,8 +10,7 @@ class Employee extends Model
     use HasFactory;
 
     protected $table = 'employees';
-    protected $fillable = ['code', 'user_id'];
-
-
+    protected $fillable = ['code', 'user_id', 'post_id'];
+    
     
 }

@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Employee;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -25,7 +26,7 @@ class EmployeeSeeder extends Seeder
 
         $formFields2=[
             'user_id' => $user->id,
-            'post_id' => 1,
+            'post_id' => Post::inRandomOrder()->first()->id,
             'code' => "drissikarim999@gmail.com123456789"
         ];
         
