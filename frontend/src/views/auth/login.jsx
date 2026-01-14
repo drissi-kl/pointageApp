@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 
 import StarBorder from '../../components/ReactBits/StarBorder';
 import { setUser } from '@/store/sliceUser';
+import { changePage } from '@/store/slicePage';
 
 
 const Login = () => {
@@ -18,8 +19,9 @@ const Login = () => {
 
   const LoginForm = (e) => {
     console.log(e);
-    e.role = 'employee';
+    e.role = 'superadmin';
     dispatch(setUser(e));
+    dispatch(changePage('home'));
     navigate('/dashboard');
   };
 

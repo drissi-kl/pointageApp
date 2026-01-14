@@ -1,4 +1,4 @@
-const { createSlice } = require("@reduxjs/toolkit");
+import { createSlice } from "@reduxjs/toolkit";
 
 
 
@@ -17,6 +17,6 @@ const slicePage = createSlice({
 
 
 export default slicePage;
-export const {changePage } = slicePage.actions;
+export const {changePage } = slicePage.actions
 
 

@@ -11,15 +11,16 @@ import { LuScanQrCode } from "react-icons/lu";
 import { FaChartBar } from "react-icons/fa";
 
 
-import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { changePage } from '@/store/slicePage';
 
 
 
 
+
 export default function Sidebar({}) {
-    const user = useSelector(state=>state.sliceUser.user);
+    const user = useSelector(state => state.sliceUser.user );
+    const page = useSelector(state => state.slicePage.page)
 
 
     const dispatch = useDispatch();
@@ -42,37 +43,57 @@ export default function Sidebar({}) {
     <div className="flex flex-col justify-between flex-1 mt-10">
         <nav className="space-y-2">
             <button 
-                onClick={()=>dispatch(changePage())}
-                className="flex w-full items-center px-3 py-2 text-zinc-600 transition-colors duration-300 transform rounded-lg dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-zinc-200 hover:text-zinc-700 active-nav" >
+                onClick={()=>dispatch(changePage('home'))}
+                className={`flex w-full items-center px-3 py-2 transition-colors duration-300 transform rounded-lg
+                    ${page == "home" ? 
+                    'text-zinc-600 dark:text-zinc-800 dark:bg-zinc-100 ' 
+                    :'text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-zinc-200 hover:text-zinc-700'} `
+                }>
                 <HiHome className="w-5 h-5"/> 
                 <span className="mx-2 text-sm font-medium">Home</span>
             </button>
 
             {user?.role == 'superadmin' && <button 
-                onClick={()=>console.log('admins')}
-                className="flex w-full items-center px-3 py-2 text-zinc-600 transition-colors duration-300 transform rounded-lg dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-zinc-200 hover:text-zinc-700" href="#">
+                onClick={()=>dispatch(changePage('admins'))}
+                className={`flex w-full items-center px-3 py-2 transition-colors duration-300 transform rounded-lg
+                    ${page == "admins" ? 
+                    'text-zinc-600 dark:text-zinc-800 dark:bg-zinc-100 ' 
+                    :'text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-zinc-200 hover:text-zinc-700'} `
+                }>
                 <IoIosPerson className="w-5 h-5"/>
                 <span className="mx-2 text-sm font-medium">Admins</span>
             </button>}
 
             {['superadmin', 'admin'].includes(user?.role) && <button 
-                onClick={()=>console.log('employees')}
-                className="flex w-full items-center px-3 py-2 text-zinc-600 transition-colors duration-300 transform rounded-lg dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-zinc-200 hover:text-zinc-700" href="#">
+                onClick={()=>dispatch(changePage('employees'))}
+                className={`flex w-full items-center px-3 py-2 transition-colors duration-300 transform rounded-lg
+                    ${page == "employees" ? 
+                    'text-zinc-600 dark:text-zinc-800 dark:bg-zinc-100 ' 
+                    :'text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-zinc-200 hover:text-zinc-700'} `
+                }>
                 <FaUserGroup className='w-5 h-5' />
                 <span className="mx-2 text-sm font-medium">Employee</span>
             </button>
             }
 
             {['superadmin', 'admin'].includes(user?.role) && <button 
-                onClick={()=>console.log('scan')}
-                className="flex w-full items-center px-3 py-2 text-zinc-600 transition-colors duration-300 transform rounded-lg dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-zinc-200 hover:text-zinc-700" href="#">
+                onClick={()=>dispatch(changePage('scans'))}
+                className={`flex w-full items-center px-3 py-2 transition-colors duration-300 transform rounded-lg
+                    ${page == "scans" ? 
+                    'text-zinc-600 dark:text-zinc-800 dark:bg-zinc-100 ' 
+                    :'text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-zinc-200 hover:text-zinc-700'} `
+                }>
                 <LuScanQrCode className='w-5 h-5' />
                 <span className="mx-2 text-sm font-medium">Scan</span>
             </button>}
 
             <button 
-                onClick={()=>console.log('reports')}
-                className="flex w-full items-center px-3 py-2 text-zinc-600 transition-colors duration-300 transform rounded-lg dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-zinc-200 hover:text-zinc-700" href="#">
+                onClick={()=>dispatch(changePage('reports'))}
+                className={`flex w-full items-center px-3 py-2 transition-colors duration-300 transform rounded-lg
+                    ${page == "reports" ? 
+                    'text-zinc-600 dark:text-zinc-800 dark:bg-zinc-100 ' 
+                    :'text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-zinc-200 hover:text-zinc-700'} `
+                }>
                 <FaChartBar className='w-5 h-5' />
                 <span className="mx-2 text-sm font-medium">Reports</span>
             </button>
