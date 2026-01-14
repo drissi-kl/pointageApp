@@ -1,18 +1,26 @@
 import React, { useState } from 'react';
 import DarkVeil from '@/components/ReactBits/DarkVeil';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+
 
 import StarBorder from '../../components/ReactBits/StarBorder';
+import { setUser } from '@/store/sliceUser';
 
 
 const Login = () => {
   const {register, handleSubmit, reset, formState} = useForm({
   })
   const {errors}=formState;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const LoginForm = (e) => {
     console.log(e);
+    e.role = 'employee';
+    dispatch(setUser(e));
+    navigate('/dashboard');
   };
 
   return (
