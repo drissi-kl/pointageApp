@@ -1,4 +1,5 @@
 import axios from "axios";
+import getToken from "@/utilities/getToken";
 
 const baseApi = axios.create({
     baseURL: "http://127.0.0.1:8000/api",
@@ -11,8 +12,10 @@ const baseApi = axios.create({
 
 baseApi.interceptors.request.use(
     (request) => {
-
-        // request.headers.Authorization = 
+        const token = getToken();
+        if(token){
+            request.headers.Authorization = `Bearer ${token}`;
+        }
         return request;
     }
 )

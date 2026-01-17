@@ -12,7 +12,8 @@ import { changePage } from '@/store/slicePage';
 
 const Login = () => {
   const {register, handleSubmit, reset, formState} = useForm({
-  })
+    })
+
   const {errors}=formState;
   const dispatch = useDispatch();
   const navigate = useNavigate();
