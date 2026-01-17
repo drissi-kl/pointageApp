@@ -9,6 +9,7 @@ import Login from './views/auth/login'
 import ForgetPassword from "./views/auth/forgetPassword"
 import NewPassword from './views/auth/newPassword'
 import Dashboard from './views/dashboard/dashboard'
+import Register from './views/auth/register'
 // import RegisterForm from './components/auth/register'
 
 
@@ -20,6 +21,7 @@ function App() {
       <Route path="/" element={<Login />}  />
       <Route path="/forgetpassword" element={<ForgetPassword/>} />
       <Route path="/newPassword" element={<NewPassword/>} />
+      <Route path="/register" element={<Register/>} />
 
       <Route path='/dashboard' element={<Dashboard />} />
 

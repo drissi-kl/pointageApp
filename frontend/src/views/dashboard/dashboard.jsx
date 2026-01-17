@@ -8,11 +8,16 @@ import AdminSuperAdmin from '../superadmin/adminSuperAdmin';
 import EmployeeSuperAdmin from '../superadmin/employeeSuperAdmin';
 import ScanSuperAdmin from '../superadmin/scanSuperAdmin';
 import ReportsSuperAdmin from '../superadmin/reportsSuperAdmin';
+import { useQuery } from '@tanstack/react-query';
 
 export default function Dashboard() {
     const user = useSelector(state => state.sliceUser.user )
     const page = useSelector(state => state.slicePage.page )
 
+    // const {data } = useQuery({
+    //     queryKey: ['currentUser'],
+    //     queryFn:
+    // })
 
     return (
         <div className='dashboard flex h-[100vh]  overflow-hidden '>
