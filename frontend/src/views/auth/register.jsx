@@ -147,9 +147,7 @@ const Register = () => {
                     type="submit"
                     className={`w-full ${registerMutation.isPending?'bg-blue-900':'bg-blue-600'} hover:bg-blue-900 text-white font-bold py-3 rounded-lg transition-colors duration-300`}
                 >
-                    {
-                        registerMutation.isPending ? "Register ..." : "Register"
-                    }
+                    { registerMutation.isPending ? "Register ..." : "Register" }
                     
                 </button>
 

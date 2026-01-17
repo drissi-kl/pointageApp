@@ -4,7 +4,7 @@ const getToken = () => {
     const match = cookies.match(pat);
 
     if(!match){
-        throw new Error('token not exists');
+        return null;
     }
 
     return match[1];

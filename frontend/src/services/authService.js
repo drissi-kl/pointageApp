@@ -28,7 +28,31 @@ const RegisterApi = async (body)=>{
     }
 }
 
+const ForgetPasswordApi = async (body)=>{
+    try{
+        const response = await baseApi.post(`/forgetPassword`, body);
+        return response.data;
 
+    }catch(error){
+        if(axios.isAxiosError(error)){
+            throw error;
+        }
+        throw new Error('exists error from ForgetPasswordApi function')
+    }
+}
+
+const ResetPasswordApi = async (body)=>{
+    try{
+        const response = await baseApi.post(`/resetPassword`, body);
+        return response.data;
+
+    }catch(error){
+        if(axios.isAxiosError(error)){
+            throw error;
+        }
+        throw new Error('exists error from ResetPasswordApi function')
+    }
+}
 
 
 const currentUserApi = async () =>{
@@ -45,7 +69,7 @@ const currentUserApi = async () =>{
 }
 
 
-export { loginApi, RegisterApi };
+export { loginApi, RegisterApi, currentUserApi, ForgetPasswordApi, ResetPasswordApi };
 
 
 

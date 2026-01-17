@@ -1,21 +1,35 @@
 import React, { useState } from 'react';
 import DarkVeil from '@/components/ReactBits/DarkVeil';
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
+import { ResetPasswordApi } from '@/services/authService';
 
 
 
 
 const NewPassword = () => {
-  const {register, handleSubmit, reset, formState, getValues} = useForm({
-  })
+  const {register, handleSubmit, reset, formState, getValues} = useForm({ })
   const {errors} = formState;
 
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const LoginForm = (e) => {
-    console.log(e);
-    navigate('/')
+  const newPasswordMutation = useMutation({
+    mutationFn: (body)=>ResetPasswordApi(body),
+    onSuccess: (data, variable, context)=>{
+      console.log(data);
+      if(data.status == 'success'){
+        navigate('/');
+      }else{
+        // for toast for show errors and warnings
+        reset()
+      }
+    }
+  })
+  const newPasswordFrom = (e) => {
+    e.email = location.state.email;    
+    newPasswordMutation.mutate(e)
   };
 
   return (
@@ -40,7 +54,7 @@ const NewPassword = () => {
               Pointage App
             </h2>
             
-            <form onSubmit={handleSubmit(LoginForm)} className="space-y-6">
+            <form onSubmit={handleSubmit(newPasswordFrom)} className="space-y-6">
               <div>
                 <label className="block text-sm font-medium text-white mb-2">
                   verification code
@@ -48,8 +62,8 @@ const NewPassword = () => {
                 <input
                     type="text"
                     className="w-full px-4 py-3 text-gray-200 bg-transparent rounded-lg border border-gray-300 focus:ring-2 focus:ring-gray-500  focus:border-transparent outline-none transition-all"
-                    placeholder="enter password"
-                    {...register('verificationCode', {
+                    placeholder="enter verification code"
+                    {...register('code', {
                       required: {value: true, message: 'enter verification code'}
                     })}
                 />
@@ -94,13 +108,13 @@ const NewPassword = () => {
                     {errors.password_confirmation && <p className='text-sm text-red-600 mt-1'>{errors.password_confirmation.message}</p>}
                 </div>
 
-            
-
                 <button
+                    disabled = { newPasswordMutation.isPending  }
                     type="submit"
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition-colors duration-300"
+                    className={`w-full ${newPasswordMutation.isPending?'bg-blue-900':'bg-blue-600'} hover:bg-blue-900 text-white font-bold py-3 rounded-lg transition-colors duration-300`}
                 >
-                    Submit
+                    { newPasswordMutation.isPending ? "Register ..." : "Register" }
+                    
                 </button>
             </form>
 

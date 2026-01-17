@@ -8,22 +8,35 @@ import { useDispatch } from 'react-redux';
 import StarBorder from '../../components/ReactBits/StarBorder';
 import { setUser } from '@/store/sliceUser';
 import { changePage } from '@/store/slicePage';
+import { useMutation } from '@tanstack/react-query';
+import { loginApi } from '@/services/authService';
 
 
 const Login = () => {
-  const {register, handleSubmit, reset, formState} = useForm({
-    })
+  const {register, handleSubmit, reset, formState} = useForm({ })
 
   const {errors}=formState;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const loginMutation = useMutation({
+    mutationFn: (body)=>loginApi(body),
+    onSuccess: (data, variable, context) => {
+      if(data.status == 'success'){
+        document.cookie=`token=${data.token};max-age=3600`;
+        console.log(data)
+        // dispatch(setUser(e));
+        // dispatch(changePage('home'));
+        // navigate('/dashboard');
+      }else{
+        // toast for show errors and warnings
+        console.log(data)
+      }
+    }
+  })
   const LoginForm = (e) => {
     console.log(e);
-    e.role = 'superadmin';
-    dispatch(setUser(e));
-    dispatch(changePage('home'));
-    navigate('/dashboard');
+    loginMutation.mutate(e)
   };
 
   return (
@@ -90,9 +103,10 @@ const Login = () => {
 
               <button
                 type="submit"
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition-colors duration-300"
+                disabled = { loginMutation.isPending  }
+                className={`w-full ${loginMutation.isPending?'bg-blue-900':'bg-blue-600'} hover:bg-blue-900 text-white font-bold py-3 rounded-lg transition-colors duration-300`}
               >
-                Login
+                { loginMutation.isPending ? "Login..." : "Login" }
               </button>
 
               

@@ -2,20 +2,34 @@ import React, { useState } from 'react';
 import DarkVeil from '@/components/ReactBits/DarkVeil';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
+import { ForgetPasswordApi } from '@/services/authService';
 
 
 
 
 const ForgetPassword = () => {
-  const {register, handleSubmit, reset, formState} = useForm({
-  })
+  const {register, handleSubmit, reset, formState} = useForm({ })
   const {errors } = formState
 
   const navigate = useNavigate();
 
+  const forgetPasswordMutaion = useMutation({
+    mutationFn: (body) => ForgetPasswordApi(body),
+    onSuccess: (data, variable, context) => {
+      console.log("data", data)
+      if(data.status == 'success'){
+        navigate('/newPassword', {state: {email: variable.email}});
+
+      }else{
+        // toast for show errors and wornings
+        reset();
+      }
+    }
+  })
   const forgetPasswordForm = (e) => {
     console.log(e);
-    navigate('/newPassword');
+    forgetPasswordMutaion.mutate(e);
   };
 
   return (
@@ -51,7 +65,6 @@ const ForgetPassword = () => {
                         placeholder="name@company.com"
                         {...register('email', {
                             required: {value: true, message: 'email is required'},
-                            // pattern: {value: /[]/}
                         })}
                     />
                     {errors.email && <p className='text-red-500 mt-1 text-sm'>{errors.email.message}</p>}
@@ -60,11 +73,14 @@ const ForgetPassword = () => {
             
 
                 <button
+                    disabled = { forgetPasswordMutaion.isPending  }
                     type="submit"
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition-colors duration-300"
+                    className={`w-full ${forgetPasswordMutaion.isPending?'bg-blue-900':'bg-blue-600'} hover:bg-blue-900 text-white font-bold py-3 rounded-lg transition-colors duration-300`}
                 >
-                    Valide
+                    { forgetPasswordMutaion.isPending ? "Submit ..." : "Submit" }
+                    
                 </button>
+
             </form>
 
             <p className="mt-8 text-center text-sm text-gray-600">
