@@ -12,5 +12,8 @@ class Employee extends Model
     protected $table = 'employees';
     protected $fillable = ['code', 'user_id', 'post_id'];
     
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
     
 }

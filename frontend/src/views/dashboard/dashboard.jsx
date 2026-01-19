@@ -9,30 +9,39 @@ import EmployeeSuperAdmin from '../superadmin/employeeSuperAdmin';
 import ScanSuperAdmin from '../superadmin/scanSuperAdmin';
 import ReportsSuperAdmin from '../superadmin/reportsSuperAdmin';
 import { useQuery } from '@tanstack/react-query';
+import { currentUserApi } from '@/services/authService';
 
 export default function Dashboard() {
-    const user = useSelector(state => state.sliceUser.user )
+    // const user = useSelector(state => state.sliceUser.user )
     const page = useSelector(state => state.slicePage.page )
 
-    // const {data } = useQuery({
-    //     queryKey: ['currentUser'],
-    //     queryFn:
-    // })
+    const {data, isLoading:userLoading } = useQuery({
+        queryKey: ['currentUser'],
+        queryFn: currentUserApi
+    })
+
+    console.log('user', data);
+
+    if(userLoading){
+        return <h2>
+            user loading
+        </h2>
+    }
 
     return (
         <div className='dashboard flex h-[100vh]  overflow-hidden '>
             <div className='border-amber-400'>
-                <Sidebar />
+                <Sidebar user={data.user} />
             </div>
 
             <div className='flex-5 overflow-y-scroll '>
                 {
-                    user.role == 'superadmin'?(
-                        page =='home'? <HomeSuperAdmin />
-                        :page =='admins'? <AdminSuperAdmin />
-                        :page =='employees'? <EmployeeSuperAdmin />
-                        :page =='scans'? <ScanSuperAdmin />
-                        :page == 'reports'? <ReportsSuperAdmin />
+                    data.user.role == 'superadmin'?(
+                        page =='home'? <HomeSuperAdmin user={data.user} employees={data.employees} admins={data.admins} />
+                        :page =='admins'? <AdminSuperAdmin user={data.user} admins={data.admins} />
+                        // :page =='employees'? <EmployeeSuperAdmin user={user} />
+                        // :page =='scans'? <ScanSuperAdmin user={user} />
+                        // :page == 'reports'? <ReportsSuperAdmin user={user} />
                         :null
                     )
                     :null

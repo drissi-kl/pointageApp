@@ -26,8 +26,8 @@ const Login = () => {
         document.cookie=`token=${data.token};max-age=3600`;
         console.log(data)
         // dispatch(setUser(e));
-        // dispatch(changePage('home'));
-        // navigate('/dashboard');
+        dispatch(changePage('home'));
+        navigate('/dashboard');
       }else{
         // toast for show errors and warnings
         console.log(data)

@@ -14,8 +14,9 @@ baseApi.interceptors.request.use(
     (request) => {
         const token = getToken();
         if(token){
-            request.headers.Authorization = `Bearer ${token}`;
+            request.headers.authorization = `Bearer ${token}`;
         }
+        console.log('request', token);
         return request;
     }
 )

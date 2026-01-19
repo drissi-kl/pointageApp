@@ -1,20 +1,18 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Search, Mail, Phone, MoreVertical, UserPlus, ShieldCheck } from 'lucide-react';
 
-export default function AdminSuperAdmin() {
-  const [searchTerm, setSearchTerm] = useState('');
+export default function AdminSuperAdmin({user, admins}) {
+  const [searchAdmin, setSearchAdmin] = useState('');
 
-  // Sample Admin Data
-  const admins = [
-    { id: 1, name: 'Alex Rivera', email: 'alex@geminicore.com', phone: '+1 (555) 0123', role: 'Super Admin' },
-    { id: 2, name: 'Sarah Chen', email: 'sarah.c@geminicore.com', phone: '+1 (555) 0456', role: 'Admin' },
-    { id: 3, name: 'Mike Johnson', email: 'mike.j@geminicore.com', phone: '+1 (555) 0789', role: 'Admin' },
-    { id: 4, name: 'Emma Wilson', email: 'emma.w@geminicore.com', phone: '+1 (555) 0912', role: 'Admin' },
-  ];
-
-  const filteredAdmins = admins.filter(admin => 
-    admin.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredAdmins = useMemo(
+    ()=>{
+      return admins.filter(admin => 
+        admin.name.toLowerCase().includes(searchAdmin.toLowerCase())
+      );
+    }, [searchAdmin]
+  )
+  
+  
 
   return (
     <main className="flex-1 bg-zinc-50 dark:bg-zinc-900 min-h-screen p-8">
@@ -41,7 +39,7 @@ export default function AdminSuperAdmin() {
           type="text" 
           placeholder="Search admins by name..." 
           className="bg-transparent border-none focus:ring-0 text-zinc-700 dark:text-zinc-200 text-sm w-full"
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={(e) => setSearchAdmin(e.target.value)}
         />
       </div>
 
@@ -57,7 +55,7 @@ export default function AdminSuperAdmin() {
             </tr>
           </thead>
           <tbody className="divide-y divide-zinc-100 dark:divide-zinc-700">
-            {filteredAdmins.map((admin) => (
+            {filteredAdmins && filteredAdmins.map((admin) => (
               <tr key={admin.id} className="hover:bg-zinc-50 dark:hover:bg-zinc-700/30 transition-colors duration-200 group">
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
@@ -83,7 +81,7 @@ export default function AdminSuperAdmin() {
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
                     <Phone size={14} />
-                    {admin.phone}
+                    {admin.phone || 'Unknown'}
                   </div>
                 </td>
                 <td className="px-6 py-4 text-right">
@@ -98,7 +96,7 @@ export default function AdminSuperAdmin() {
         
         {filteredAdmins.length === 0 && (
           <div className="p-12 text-center text-zinc-500">
-            No admins found matching "{searchTerm}"
+            No admins found matching "{searchAdmin}"
           </div>
         )}
       </div>

@@ -18,8 +18,8 @@ import { changePage } from '@/store/slicePage';
 
 
 
-export default function Sidebar({}) {
-    const user = useSelector(state => state.sliceUser.user );
+export default function Sidebar({user}) {
+    // const user = useSelector(state => state.sliceUser.user );
     const page = useSelector(state => state.slicePage.page)
 
 

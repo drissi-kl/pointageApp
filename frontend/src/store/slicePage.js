@@ -4,7 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const slicePage = createSlice({
     name: 'slicePage',
-    initialState: {page: null},
+    initialState: {page: 'home'},
     reducers: {
         changePage: (state, actions)=>{
             state.page = actions.payload;

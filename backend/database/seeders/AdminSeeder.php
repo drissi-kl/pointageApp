@@ -13,13 +13,23 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
-        $formFields = [
-            'name'=>"drissi rokaya",
-            'email' => "drissirokaya999@gmail.com",
-            'password' => 'drissirokaya999@gmail.com',
-            'role' => 'admin'
+        $users = [
+            [
+                'name'=>"drissi rokaya",
+                'email' => "drissirokaya999@gmail.com",
+                'password' => 'drissirokaya999@gmail.com',
+                'role' => 'admin'
+            ],[
+                'name'=>"drissi bokaya",
+                'email' => "drissibokaya999@gmail.com",
+                'password' => 'drissibokaya999@gmail.com',
+                'role' => 'admin'
+            ]
         ];
 
-        User::create($formFields);
+        foreach($users as $user){
+            $user = User::create($user);
+        }
+
     }
 }
