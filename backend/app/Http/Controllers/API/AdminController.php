@@ -11,27 +11,22 @@ use Illuminate\Support\Facades\Hash;
 class AdminController extends Controller
 {
 
-    public function delete($id){
+    public function store(Request $request){
         try{
-            $user = User::find($id);
-            if(!$user){
-                return response()->json([
-                    'status'=>'fail',
-                    'message'=>'this admin not exists'
-                ]);    
-            }
+            $formField = $request->validate([
+                "email" => "required|string|email",
+                "name" => "required|string",
+                "phone" => "string",
+                "address" => "string",
+                "role" => "admin"
+            ]);
 
-            if($user->role == 'admin'){
-                return response()->json([
-                    'status'=>'fail',
-                    'message'=>"this user not admin, it is $user->role"
-                ]); 
-            }
+            $user = User::create($formField);
 
-            $user->delete();
+
             return response()->json([
                 'status'=>'success',
-                'message'=>"delete admin $user->name successfully"
+                'message'=>"create admin $user->name successfully"
             ]);
 
         }catch(Exception $e){

@@ -81,7 +81,7 @@ const NewPassword = () => {
                       {...register('password', {
                         required: {value: true, message: "enter password"},
                         minLength: {value: 4, message: 'the password contain at least 4 character'},
-                        maxLength: {value: 20, message: 'the password contain at more 20 character'}
+                        maxLength: {value: 30, message: 'the password contain at more 30 character'}
                       })}
                   />
                   {errors.password && <p className='text-sm text-red-600 mt-1'>{errors.password.message}</p>}
