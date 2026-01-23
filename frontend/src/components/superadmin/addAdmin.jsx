@@ -2,18 +2,30 @@ import React from 'react'
 
 import {ShieldCheck} from 'lucide-react'
 import { useForm } from 'react-hook-form'
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { error } from 'three/src/utils.js';
+import { StoreApi } from '@/services/authService';
 
 export default function AddAdmin({showAdmins}) {
+    const queryClient = useQueryClient();
 
     const {register, handleSubmit, reset, formState}=useForm();
     const {errors}=formState
 
 
-    const addAdminMutation = useMutation({})
+    const addAdminMutation = useMutation({
+        mutationFn: (e)=>StoreApi(e),
+        onSuccess: (data, variable, context)=>{
+            console.log(data);
+            if(data.status === "success"){
+                queryClient.getQueriesData(['currentUser']);
+                showAdmins()
+            }
+        }
+    })
     const addAdminForm = (e) =>{
-        console.log(e)
+        e.role = 'admin';
+        addAdminMutation.mutate(e)
     }
 
 
@@ -92,8 +104,8 @@ export default function AddAdmin({showAdmins}) {
 
                 {/* Submit Button */}
                 <div className="pt-4 border-t border-zinc-800">
-                <button className="w-full md:w-max px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-lg shadow-blue-900/20 transition-all duration-200 transform active:scale-95">
-                    Create
+                <button className={`w-full md:w-max px-6 py-3 ${addAdminMutation.isPending ? 'bg-blue-900' : 'bg-blue-600' }  bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-lg shadow-blue-900/20 transition-all duration-200 transform active:scale-95`}>
+                    {addAdminMutation.isPending ? "Create ..." : "Create"} 
                 </button>
                 </div>
             </form>

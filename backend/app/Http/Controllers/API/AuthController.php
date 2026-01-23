@@ -89,15 +89,16 @@ class AuthController extends Controller
 
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created admin or employee
      */
     public function store(Request $request)
     {
         try{
             $formFields = $request->validate([
-                "name"=>'required|string',
-                "email"=>'required|email',
-                "password"=>"required|confirmed",
+                "name"=>"required|string",
+                "email"=>"required|email",
+                "phone"=>"required|string",
+                "address"=>"string",
                 "role"=>"required|in:admin,employee"
             ]);
 
@@ -109,7 +110,7 @@ class AuthController extends Controller
                 ]);
             }
 
-            $formFields['password'] = Hash::make($formFields['password']);
+            $formFields['password'] = Hash::make("user");
 
             if($formFields['role'] == "employee"){
 

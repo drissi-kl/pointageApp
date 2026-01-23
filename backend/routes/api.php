@@ -14,6 +14,7 @@ use App\Http\Middleware\createAdimOrEmp;
 // ## start auth routes ##
 Route::controller(AuthController::class)->group(function(){
     Route::post('/register', "register");
+    Route::post('/store', "store");
     Route::post('/login', "login");
     Route::post('/forgetPassword', "forgetPassword");
     Route::post('/resetPassword', "resetPassword");
