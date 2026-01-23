@@ -6,7 +6,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { error } from 'three/src/utils.js';
 import { StoreApi } from '@/services/authService';
 
-export default function AddAdmin({showAdmins}) {
+export default function AddEmployee({showEmployees}) {
     const queryClient = useQueryClient();
 
     const {register, handleSubmit, reset, formState}=useForm();
@@ -21,7 +21,7 @@ export default function AddAdmin({showAdmins}) {
                 queryClient.setQueryData(['admins'], (oldData)=>{
                     return {...oldData, admins:[...oldData.admins, data.admin]};
                 })
-                showAdmins();
+                showEmployees();
             }
         }
     })
@@ -38,7 +38,7 @@ export default function AddAdmin({showAdmins}) {
                 <ShieldCheck className="text-blue-600" />
                 Add Admin
             </h1>
-            <button onClick={()=>showAdmins()} className='bg-blue-600 hover:bg-blue-700 transition-all duration-300 rounded-md  text-white font-semibold px-4 py-2' >Admins</button>
+            <button onClick={()=>showEmployees()} className='bg-blue-600 hover:bg-blue-700 transition-all duration-300 rounded-md  text-white font-semibold px-4 py-2' >Employees</button>
         </header>
 
 

@@ -136,12 +136,14 @@ class AuthController extends Controller
                 return response()->json([
                     "status" => "success",
                     "message" => "create employee ".$user->name." success",
+
                 ]);
             }else if($formFields['role'] == "admin" ){
                 $user = User::create($formFields);
                 return response()->json([
                     "status" => "success",
                     "message" => "create admin ".$user->name." success",
+                    "admin" => $user
                 ]);
             }
 
@@ -309,18 +311,6 @@ class AuthController extends Controller
     public function currentUser(Request $request){
         try{
             $curuser = $request->user();
-            if($curuser->role === "superadmin"){
-                $employees = User::where('role', 'employee')->with('employee')->get();
-                $admins = User::where('role', 'admin')->get();
-                
-                
-                return response()->json([
-                    'status'=>'success',
-                    'user' => $curuser,
-                    'employees' => $employees ?? "not exists employees",
-                    'admins' => $admins ?? "not exists admins"
-                ]);
-            }
 
             return response()->json([
                 'status'=>'success',

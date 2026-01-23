@@ -3,16 +3,15 @@ import { Search, Mail, Phone, MoreVertical, UserPlus, ShieldCheck } from 'lucide
 import ShowAdmins from '@/components/superadmin/showAdmins';
 import AddAdmin from '@/components/superadmin/addAdmin';
 
-export default function AdminSuperAdmin({user, admins}) {
-  const [showAddAdminForm, setShowAddAdminForm]=useState(false);
-  
-  
+export default function AdminSuperAdmin() {
+  const [showAddAdminForm, setShowAddAdminForm]=useState(false);  
+
 
   return (
     <div>
       {
         showAddAdminForm ? <AddAdmin showAdmins={()=>setShowAddAdminForm(false)} />
-        : <ShowAdmins admins={admins} addAdmin={()=>setShowAddAdminForm(true)} />  
+        : <ShowAdmins addAdmin={()=>setShowAddAdminForm(true)} />  
       }
     </div>
       

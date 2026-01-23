@@ -37,11 +37,11 @@ export default function Dashboard() {
             <div className='flex-5 overflow-y-scroll '>
                 {
                     data.user.role == 'superadmin'?(
-                        page =='home'? <HomeSuperAdmin user={data.user} employees={data.employees} admins={data.admins} />
-                        :page =='admins'? <AdminSuperAdmin user={data.user} admins={data.admins} />
-                        // :page =='employees'? <EmployeeSuperAdmin user={user} />
-                        // :page =='scans'? <ScanSuperAdmin user={user} />
-                        // :page == 'reports'? <ReportsSuperAdmin user={user} />
+                        page =='home'? <HomeSuperAdmin />
+                        :page =='admins'? <AdminSuperAdmin />
+                        :page =='employees'? <EmployeeSuperAdmin />
+                        :page =='scans'? <ScanSuperAdmin user={user} />
+                        :page == 'reports'? <ReportsSuperAdmin user={user} />
                         :null
                     )
                     :null

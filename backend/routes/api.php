@@ -1,5 +1,7 @@
 <?php
+use App\Http\Controllers\API\AdminController;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\EmployeeController;
 use App\Http\Controllers\API\ExceptionalTimeController;
 use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\API\TimesheetContoller;
@@ -26,6 +28,20 @@ Route::middleware(["auth:sanctum"])->controller( AuthController::class)->group(f
     Route::middleware(["createAdminOrEmp"])->post('/store', "store");
 });
 // ## end auth routes ##
+
+
+
+// ## start admin routes
+Route::middleware('auth:sanctum')->controller(AdminController::class)->group(function(){
+    Route::get('/admins', 'index');
+});
+// ## end admin routes
+
+// ## start employee routes
+Route::middleware('auth:sanctum')->controller(EmployeeController::class)->group(function(){
+    Route::get('/employees', 'index');
+});
+// ## end employee routes
 
 
 

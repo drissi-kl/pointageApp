@@ -10,6 +10,20 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
+    public function index(){
+        try{
+            $admins = User::where('role', 'admin')->get();
+            return response()->json([
+                'status'=>'success',
+                'admins'=>$admins
+            ]);
+        }catch(Exception $e){
+            return response()->json([
+                'status'=>'error',
+                'message'=>$e->getMessage()
+            ]);
+        }
+    }
 
     public function store(Request $request){
         try{

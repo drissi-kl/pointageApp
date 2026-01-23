@@ -10,6 +10,22 @@ use Illuminate\Http\Request;
 class EmployeeController extends Controller
 {
 
+    public function index(){
+        try{
+            $employees = User::where('role', 'employee')->with('employee')->get();
+            
+            
+            return response()->json([
+                'status' => 'success',
+                'employees' => $employees
+            ]);
+        }catch(Exception $e){
+            return response()->json([
+                'status'=>'error',
+                'message'=>$e->getMessage()
+            ]);
+        }
+    }
 
 
     public function delete($id){

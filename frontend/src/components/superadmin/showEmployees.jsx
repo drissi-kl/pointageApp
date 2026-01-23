@@ -4,7 +4,7 @@ import Actions from './actions';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getAllAdminsApi } from '@/services/adminService';
 
-export default function ShowAdmins({addAdmin}) {
+export default function ShowEmployees({addEmployee}) {
     const [searchAdmin, setSearchAdmin] = useState('');
 
     const queryClient = useQueryClient();
@@ -41,7 +41,7 @@ export default function ShowAdmins({addAdmin}) {
             <p className="text-zinc-500 dark:text-zinc-400">Manage system administrators and their contact details.</p>
             </div>
             
-            <button onClick={()=>addAdmin()} className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 shadow-sm transition-all duration-300">
+            <button onClick={()=>addEmployee()} className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 shadow-sm transition-all duration-300">
                 <UserPlus size={18} />
                 Add New Admin
             </button>

@@ -1,10 +1,13 @@
+import { getAllAdminsApi } from '@/services/adminService';
+import { getAllEmployeesApi } from '@/services/employeeService';
 import { changePage } from '@/store/slicePage';
+import { useQuery } from '@tanstack/react-query';
 import React from 'react'
 import { useDispatch } from 'react-redux';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
 
-export default function HomeSuperAdmin({user, employees, admins}) {
+export default function HomeSuperAdmin() {
   const data = [
     { name: 'Alex R.', hours: 8.5 },
     { name: 'Jordan S.', hours: 7.2 },
@@ -24,7 +27,24 @@ export default function HomeSuperAdmin({user, employees, admins}) {
 
   const dispatch = useDispatch();
 
+  // retriev admins
+  const {data: admins, isLoading: adminsLoading }=useQuery({
+    queryKey: ['admins'],
+    queryFn: getAllAdminsApi
+  })
+  
+  // retriev employees
+  const {data: employees, isLoading: employeesLoading }=useQuery({
+    queryKey: ['employees'],
+    queryFn: getAllEmployeesApi
+  })
+  console.log('employees', employees);
+
   // console.log('home super admin user', user)
+
+  if(adminsLoading || employeesLoading){
+    return <p>loading admins and employees</p>
+  }
   
   return (
     <main className="flex-1 bg-zinc-50 dark:bg-zinc-900 min-h-screen p-8">
@@ -57,7 +77,7 @@ export default function HomeSuperAdmin({user, employees, admins}) {
 
       <div>
         <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Total Employees</p>
-        <h3 className="text-2xl font-bold text-zinc-800 dark:text-white"> {employees?.length || 0} </h3>
+        <h3 className="text-2xl font-bold text-zinc-800 dark:text-white"> {employees.employees?.length || 0} </h3>
       </div>
       
     </div>
@@ -73,7 +93,7 @@ export default function HomeSuperAdmin({user, employees, admins}) {
       </div>
       <div>
         <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Admins</p>
-        <h3 className="text-2xl font-bold text-zinc-800 dark:text-white"> {admins.length || 0} </h3>
+        <h3 className="text-2xl font-bold text-zinc-800 dark:text-white"> {admins.admins.length || 0} </h3>
       </div>
     </div>
 
