@@ -10,6 +10,7 @@ import ScanSuperAdmin from '../superadmin/scanSuperAdmin';
 import ReportsSuperAdmin from '../superadmin/reportsSuperAdmin';
 import { useQuery } from '@tanstack/react-query';
 import { currentUserApi } from '@/services/authService';
+import PostsSuperAdmin from '../superadmin/postsSuperAdmin';
 
 export default function Dashboard() {
     // const user = useSelector(state => state.sliceUser.user )
@@ -40,8 +41,9 @@ export default function Dashboard() {
                         page =='home'? <HomeSuperAdmin />
                         :page =='admins'? <AdminSuperAdmin />
                         :page =='employees'? <EmployeeSuperAdmin />
-                        :page =='scans'? <ScanSuperAdmin user={user} />
-                        :page == 'reports'? <ReportsSuperAdmin user={user} />
+                        :page =='scans'? <ScanSuperAdmin />
+                        :page == 'posts'? <PostsSuperAdmin />
+                        :page == 'reports'? <ReportsSuperAdmin />
                         :null
                     )
                     :null

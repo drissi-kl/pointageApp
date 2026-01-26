@@ -1,5 +1,6 @@
 import { getAllAdminsApi } from '@/services/adminService';
 import { getAllEmployeesApi } from '@/services/employeeService';
+import { getAllPostsApi } from '@/services/postService';
 import { changePage } from '@/store/slicePage';
 import { useQuery } from '@tanstack/react-query';
 import React from 'react'
@@ -38,7 +39,14 @@ export default function HomeSuperAdmin() {
     queryKey: ['employees'],
     queryFn: getAllEmployeesApi
   })
-  console.log('employees', employees);
+
+  // retriev posts
+  const {data: posts, isLoading: postsLoading} = useQuery({
+    queryKey: ["posts"],
+    queryFn: getAllPostsApi
+  })
+
+
 
   // console.log('home super admin user', user)
 

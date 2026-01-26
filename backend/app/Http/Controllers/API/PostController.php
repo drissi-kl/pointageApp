@@ -44,6 +44,7 @@ class PostController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => "create post ".$post->name." successful",
+                'post' => $post
             ]);
 
         }catch(Exception $e){
@@ -57,33 +58,33 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        try{
-            $post = Post::find($id);
-            if(!$post){
-                return response()->json([
-                    'status' => 'fail',
-                    'message' => 'this post not exists'
-                ]);
-            }
-            return response()->json([
-                'status' => 'success',
-                'post' => $post
-            ]);
+    // public function show(string $id)
+    // {
+    //     try{
+    //         $post = Post::find($id);
+    //         if(!$post){
+    //             return response()->json([
+    //                 'status' => 'fail',
+    //                 'message' => 'this post not exists'
+    //             ]);
+    //         }
+    //         return response()->json([
+    //             'status' => 'success',
+    //             'post' => $post
+    //         ]);
 
-        }catch(Exception $e){
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ]);
-        }
-    }
+    //     }catch(Exception $e){
+    //         return response()->json([
+    //             'status' => 'error',
+    //             'message' => $e->getMessage()
+    //         ]);
+    //     }
+    // }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
         try{
             $formField = $request->all();

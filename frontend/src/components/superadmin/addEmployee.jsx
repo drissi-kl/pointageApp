@@ -26,10 +26,14 @@ export default function AddEmployee({showEmployees}) {
         }
     })
     const addAdminForm = (e) =>{
-        e.role = 'admin';
-        addAdminMutation.mutate(e)
+        e.role = 'employee';
+        console.log(e);
+        // addAdminMutation.mutate(e)
     }
 
+
+    const posts = queryClient.getQueryData(['posts']);
+    console.log('posts', posts);
 
     return (
         <main className="flex-1 bg-zinc-50 dark:bg-zinc-900 min-h-screen p-8">
@@ -89,6 +93,41 @@ export default function AddEmployee({showEmployees}) {
                             className="px-4 py-2.5 bg-zinc-800 border border-zinc-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200 placeholder:text-zinc-500"
                         />
                         {errors.phone && <p className='text-red-500 text-sm'>{errors.phone.message}</p>}
+                    </div>
+
+                    {/* post Field */}
+                    <div className="flex flex-col gap-2">
+                        <label className="text-sm font-medium text-zinc-400 ml-1">Post *</label>
+                        {/* <input 
+                            type="tel" 
+                            {...register('phone', {
+                                required:{value:true, message:"Phone is required for create admin"}
+                            })} 
+                            placeholder="0x xx xx xx xx"
+                            className="px-4 py-2.5 bg-zinc-800 border border-zinc-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200 placeholder:text-zinc-500"
+                        /> */}
+
+                        <select {...register('post', {
+                            required: {value: true, message: "post is required for create employee"},
+                            validate: (post)=>{
+                                if(post == 'select post'){
+                                    return 'select post of this employee'
+                                }
+                            }
+                        })} className="px-4 py-2.5 bg-zinc-800 border border-zinc-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200 placeholder:text-zinc-500" >
+                            <option>select post</option>
+                            {
+                                posts?.posts.map((post)=>{ return <option key={post.id} value={post.id} >
+                                        <div>
+                                            {post.name}
+
+                                        </div>
+                                    </option>
+                                })
+                            }
+                        </select>
+
+                        {errors.post && <p className='text-red-500 text-sm'>{errors.post.message}</p>}
                     </div>
 
                     {/* Address Field */}

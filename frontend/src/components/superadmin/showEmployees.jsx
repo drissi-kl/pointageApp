@@ -51,10 +51,10 @@ export default function ShowEmployees({addEmployee}) {
         <div className="mb-6 flex items-center bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-2 w-full max-w-md shadow-sm">
             <Search className="text-zinc-400 mr-2" size={20} />
             <input 
-            type="text" 
-            placeholder="Search admins by name..." 
-            className="bg-transparent border-none focus:ring-0 text-zinc-700 dark:text-zinc-200 text-sm w-full"
-            onChange={(e) => setSearchAdmin(e.target.value)}
+                type="text" 
+                placeholder="Search admins by name..." 
+                className="bg-transparent border-none focus:ring-0 text-zinc-700 dark:text-zinc-200 text-sm w-full"
+                onChange={(e) => setSearchAdmin(e.target.value)}
             />
         </div>
 
@@ -109,7 +109,7 @@ export default function ShowEmployees({addEmployee}) {
             </tbody>
             </table>
             
-            {filteredAdmins.length === 0 && (
+            {filteredAdmins?.length === 0 && (
             <div className="p-12 text-center text-zinc-500">
                 No admins found matching "{searchAdmin}"
             </div>

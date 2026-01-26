@@ -13,6 +13,7 @@ import { FaChartBar } from "react-icons/fa";
 
 import { useDispatch, useSelector } from 'react-redux';
 import { changePage } from '@/store/slicePage';
+import { FlagTriangleLeft } from 'lucide-react';
 
 
 
@@ -85,6 +86,17 @@ export default function Sidebar({user}) {
                 }>
                 <LuScanQrCode className='w-5 h-5' />
                 <span className="mx-2 text-sm font-medium">Scan</span>
+            </button>}
+
+            {['superadmin', 'admin'].includes(user?.role) && <button 
+                onClick={()=>dispatch(changePage('posts'))}
+                className={`flex w-full items-center px-3 py-2 transition-colors duration-300 transform rounded-lg
+                    ${page == "posts" ? 
+                    'text-zinc-600 dark:text-zinc-800 dark:bg-zinc-100 ' 
+                    :'text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-zinc-200 hover:text-zinc-700'} `
+                }>
+                <FlagTriangleLeft className='w-5 h-5' />
+                <span className="mx-2 text-sm font-medium">Posts</span>
             </button>}
 
             <button 
