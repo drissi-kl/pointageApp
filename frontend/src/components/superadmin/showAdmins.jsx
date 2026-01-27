@@ -117,7 +117,7 @@ export default function ShowAdmins({addAdmin}) {
         </div>
 
         {
-            selectedAdmin && <Actions admin={selectedAdmin} closeActions={()=>setSelectedAdmin(null)} />
+            selectedAdmin && <Actions user={selectedAdmin} closeActions={()=>setSelectedAdmin(null)} />
         }
         </main>
     )
