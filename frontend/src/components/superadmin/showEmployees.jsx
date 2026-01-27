@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import { Search, Mail, Phone, MoreVertical, UserPlus, ShieldCheck } from 'lucide-react';
-import Actions from './actions';
+import Actions from '../actions/actions';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getAllAdminsApi } from '@/services/adminService';
 
