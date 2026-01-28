@@ -35,8 +35,8 @@ class ExceptionalTimeController extends Controller
                 "user_id" => "required"
             ]);
 
-            $excTime = ExceptionalTime::where('dayName', $formFields['dayName'])
-                ->where('user_id', $formFields['user_id'])
+            $excTime = ExceptionalTime::where('user_id', $formFields['user_id'])
+                ->where('dayName', $formFields['dayName'])
                 ->get();
 
             if($excTime){
@@ -54,11 +54,12 @@ class ExceptionalTimeController extends Controller
                 ]);   
             }
 
-            ExceptionalTime::create($formFields);
+            $exceptionalTime = ExceptionalTime::create($formFields);
 
             return response()->json([
                 'status' => 'success',
-                "message" => "create exceptional time for ".$user->name." successful"
+                "message" => "create exceptional time for ".$user->name." successful",
+                "exceptionalTime" => $exceptionalTime
             ]);
 
         }catch(Exception $e){

@@ -109,7 +109,7 @@ export default function ShowAdmins({addAdmin}) {
             </tbody>
             </table>
             
-            {filteredAdmins.length === 0 && (
+            {filteredAdmins?.length === 0 && (
             <div className="p-12 text-center text-zinc-500">
                 No admins found matching "{searchAdmin}"
             </div>
