@@ -1,11 +1,11 @@
 import React, { useMemo, useState } from 'react'
-import { Search, MoreVertical, Clock7, FlagTriangleLeft, Plus } from 'lucide-react';
+import { Search, MoreVertical, Clock7, FlagTriangleLeft, Plus, Trash, SquarePen } from 'lucide-react';
 import Actions from '../actions/actions';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getAllAdminsApi } from '@/services/adminService';
 
 
-export default function ShowPosts({addPost}) {
+export default function ShowPosts({addPost, postSelected }) {
     const [searchPost, setSearchPost] = useState('');
 
     const queryClient = useQueryClient();
@@ -25,9 +25,7 @@ export default function ShowPosts({addPost}) {
     )
 
 
-    const [selectedPost, setSelectedPost]=useState(null);
 
-    console.log('posts', posts);
     
 
 
@@ -88,9 +86,13 @@ export default function ShowPosts({addPost}) {
                                 </div>
                             </td>
                         
-                            <td className="px-6 py-4 text-right ">
-                                <button onClick={()=>setSelectedPost(post)} className="p-2 hover:bg-zinc-200 dark:hover:bg-zinc-600 rounded-lg transition-colors relative overflow-visible">
-                                    <MoreVertical size={18} className="text-zinc-400" />
+                            <td className="px-6 py-4 text-right">
+                                <button onClick={()=>postSelected(post)} className="p-2 hover:bg-zinc-200 dark:hover:bg-zinc-600 rounded-lg transition-colors relative overflow-visible mr-2">
+                                    <SquarePen size={18} className="text-zinc-400" />
+                                </button>
+
+                                <button className="p-2 hover:bg-red-200 dark:hover:bg-red-500/20 rounded-lg transition-colors relative overflow-visible">
+                                    <Trash size={18} className="text-red-500" />
                                 </button>
                             </td>
                         </tr>

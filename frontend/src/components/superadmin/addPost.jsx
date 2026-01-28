@@ -39,7 +39,7 @@ export default function AddPost({showPosts}) {
                 <FlagTriangleLeft className="text-blue-600" />
                 Add Post
             </h1>
-            <button onClick={()=>showPosts()} className='bg-blue-600 hover:bg-blue-700 transition-all duration-300 rounded-md  text-white font-semibold px-4 py-2' >Posts</button>
+            <button onClick={()=>showPosts()} className='bg-blue-600 hover:bg-blue-700 transition-all duration-300 rounded-md  text-white font-medium px-4 py-2' >Posts</button>
         </header>
 
 
