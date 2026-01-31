@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 
 import Sidebar from '@/components/sidebare/sidebar';
@@ -11,14 +11,18 @@ import ReportsSuperAdmin from '../superadmin/reportsSuperAdmin';
 import { useQuery } from '@tanstack/react-query';
 import { currentUserApi } from '@/services/authService';
 import PostsSuperAdmin from '../superadmin/postsSuperAdmin';
+import getToken from '@/utilities/getToken';
+import { useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
+
     // const user = useSelector(state => state.sliceUser.user )
     const page = useSelector(state => state.slicePage.page )
 
     const {data, isLoading:userLoading } = useQuery({
         queryKey: ['currentUser'],
-        queryFn: currentUserApi
+        queryFn: currentUserApi,
+        refetchOnWindowFocus: false,  
     })
 
     console.log('user', data);
@@ -37,7 +41,7 @@ export default function Dashboard() {
 
             <div className='flex-5 overflow-y-scroll '>
                 {
-                    data.user.role == 'superadmin'?(
+                    data.user.role == 'superadmin' ? (
                         page =='home'? <HomeSuperAdmin />
                         :page =='admins'? <AdminSuperAdmin />
                         :page =='employees'? <EmployeeSuperAdmin />
@@ -46,6 +50,7 @@ export default function Dashboard() {
                         :page == 'reports'? <ReportsSuperAdmin />
                         :null
                     )
+
                     :null
                     
                 }

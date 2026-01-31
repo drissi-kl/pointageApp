@@ -1,7 +1,10 @@
+import timeFormat from '@/utilities/timeFormat';
 import { Sheet, CalendarDays, Clock } from 'lucide-react'
 import React from 'react'
 
-export default function Timesheet() {
+export default function Timesheet({user}) {
+
+    
     return (
         <main className="animate-in fade-in duration-500">
             <header className="mb-10">
@@ -33,62 +36,47 @@ export default function Timesheet() {
             </div>
 
 
-            <div className="overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/40 backdrop-blur-sm shadow-2xl">
-                <table className="w-full text-left border-collapse text-sm">
-                    <thead>
-                        <tr className="bg-zinc-800/30 border-b border-zinc-800">
-                            <th className="px-6 py-5 font-black text-zinc-500 uppercase tracking-widest text-[10px]">Date</th>
-                            <th className="px-6 py-5 font-black text-zinc-500 uppercase tracking-widest text-[10px]">Arrival</th>
-                            <th className="px-6 py-5 font-black text-zinc-500 uppercase tracking-widest text-[10px]">Break Start</th>
-                            <th className="px-6 py-5 font-black text-zinc-500 uppercase tracking-widest text-[10px]">Break End</th>
-                            <th className="px-6 py-5 font-black text-zinc-500 uppercase tracking-widest text-[10px]">Departure</th>
-                            <th className="px-6 py-5 font-black text-zinc-500 uppercase tracking-widest text-[10px]">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-zinc-800/50">
-                        <tr className="hover:bg-zinc-800/30 transition-colors group">
-                            <td className="px-6 py-4 font-medium text-zinc-200">Nov 23, 2026</td>
-                            <td className="px-6 py-4 text-zinc-400 group-hover:text-zinc-200">08:30</td>
-                            <td className="px-6 py-4 text-zinc-500">01:00</td>
-                            <td className="px-6 py-4 text-zinc-500">02:00</td>
-                            <td className="px-6 py-4 text-zinc-400 group-hover:text-zinc-200">18:00</td>
-                            <td className="px-6 py-4 text-right">
-                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
-                                    <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse"></div>
-                                    Present
-                                </span>
-                            </td>
-                        </tr>
+            {
+                user?.timesheet.length > 0 ? <div className="overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/40 backdrop-blur-sm shadow-2xl">
+                    <table className="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr className="bg-zinc-800/30 border-b border-zinc-800">
+                                <th className="px-6 py-5 font-black text-zinc-500 uppercase tracking-widest text-[10px]">Date</th>
+                                <th className="px-6 py-5 font-black text-zinc-500 uppercase tracking-widest text-[10px]">Arrival</th>
+                                <th className="px-6 py-5 font-black text-zinc-500 uppercase tracking-widest text-[10px]">Break Start</th>
+                                <th className="px-6 py-5 font-black text-zinc-500 uppercase tracking-widest text-[10px]">Break End</th>
+                                <th className="px-6 py-5 font-black text-zinc-500 uppercase tracking-widest text-[10px]">Departure</th>
+                                <th className="px-6 py-5 font-black text-zinc-500 uppercase tracking-widest text-[10px]">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-zinc-800/50">
+                            {user?.timesheet?.map((timesheet, index)=>{
+                                    return <tr key={index} className="hover:bg-zinc-800/30 transition-colors group">
+                                                <td className="px-6 py-4 font-medium text-zinc-200">Nov 23, 2026</td>
+                                                <td className="px-6 py-4 text-zinc-400 group-hover:text-zinc-200">{timeFormat(timesheet?.arrivalTime)}</td>
+                                                <td className="px-6 py-4 text-zinc-500">{timeFormat(timesheet?.beforeBreak)}</td>
+                                                <td className="px-6 py-4 text-zinc-500">{timeFormat(timesheet?.afterBreak)}</td>
+                                                <td className="px-6 py-4 text-zinc-400 group-hover:text-zinc-200">{timeFormat(timesheet?.departureTime)}</td>
+                                                <td className="px-6 py-4 text-right">
+                                                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                                                        <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse"></div>
+                                                        Present
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                })
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                : <div className='' >
+                    not found any scan
+                </div>
 
-                        <tr className="hover:bg-zinc-800/30 transition-colors group border-l-2 border-l-transparent hover:border-l-amber-500/50">
-                            <td className="px-6 py-4 font-medium text-zinc-200">Nov 24, 2026</td>
-                            <td className="px-6 py-4 text-amber-500 font-bold">09:30</td>
-                            <td className="px-6 py-4 text-zinc-500">01:00</td>
-                            <td className="px-6 py-4 text-zinc-500">02:00</td>
-                            <td className="px-6 py-4 text-zinc-400 group-hover:text-zinc-200">18:00</td>
-                            <td className="px-6 py-4 text-right">
-                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-amber-500/10 text-amber-500 border border-amber-500/20">
-                                    Late
-                                </span>
-                            </td>
-                        </tr>
+            }
 
-                        <tr className="hover:bg-zinc-800/30 transition-colors group">
-                            <td className="px-6 py-4 font-medium text-zinc-200">Nov 25, 2026</td>
-                            <td className="px-6 py-4 text-zinc-400 group-hover:text-zinc-200">08:30</td>
-                            <td className="px-6 py-4 text-zinc-500">01:00</td>
-                            <td className="px-6 py-4 text-zinc-500">02:00</td>
-                            <td className="px-6 py-4 text-zinc-400 group-hover:text-zinc-200">18:00</td>
-                            <td className="px-6 py-4 text-right">
-                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
-                                    <div className="w-1 h-1 rounded-full bg-emerald-500"></div>
-                                    Present
-                                </span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+
+            
            
         </main>
     )

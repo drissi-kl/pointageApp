@@ -85,7 +85,7 @@ export default function HomeSuperAdmin() {
 
       <div>
         <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Total Employees</p>
-        <h3 className="text-2xl font-bold text-zinc-800 dark:text-white"> {employees.employees?.length || 0} </h3>
+        <h3 className="text-2xl font-bold text-zinc-800 dark:text-white"> {employees?.employees?.length || 0} </h3>
       </div>
       
     </div>
@@ -101,7 +101,7 @@ export default function HomeSuperAdmin() {
       </div>
       <div>
         <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Admins</p>
-        <h3 className="text-2xl font-bold text-zinc-800 dark:text-white"> {admins.admins.length || 0} </h3>
+        <h3 className="text-2xl font-bold text-zinc-800 dark:text-white"> {admins?.admins?.length || 0} </h3>
       </div>
     </div>
 

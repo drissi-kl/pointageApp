@@ -15,7 +15,7 @@ class TimesheetSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = User::find(27);
+        $user = User::find(2);
         $created = Carbon::now();
         for($i=0; $i<10; $i++){
             $created->addDays(1);

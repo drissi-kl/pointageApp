@@ -12,7 +12,10 @@ class AdminController extends Controller
 {
     public function index(){
         try{
-            $admins = User::where('role', 'admin')->get();
+            $admins = User::where('role', 'admin')
+                    ->with('timesheet')
+                    ->get();
+
             return response()->json([
                 'status'=>'success',
                 'admins'=>$admins

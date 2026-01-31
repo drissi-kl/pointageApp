@@ -3,6 +3,7 @@ import { Search, Mail, Phone, MoreVertical, UserPlus, ShieldCheck } from 'lucide
 import Actions from '../actions/actions';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getAllAdminsApi } from '@/services/adminService';
+import nameSign from '@/utilities/nameSign';
 
 export default function ShowAdmins({addAdmin}) {
     const [searchAdmin, setSearchAdmin] = useState('');
@@ -11,6 +12,8 @@ export default function ShowAdmins({addAdmin}) {
     
     // retriev admin from cache not server
     const admins = queryClient.getQueryData(['admins']);
+
+    console.log("admins", admins);
 
     // for filter admins by name or email
     const filteredAdmins = useMemo(
@@ -73,36 +76,34 @@ export default function ShowAdmins({addAdmin}) {
                 {filteredAdmins && filteredAdmins.map((admin) => (
                 <tr key={admin.id} className="hover:bg-zinc-50 dark:hover:bg-zinc-700/30 transition-colors duration-200 group">
                     <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                        <img 
-                        src={`https://ui-avatars.com/api/?name=${admin.name}&background=random&color=fff`} 
-                        alt="avatar" 
-                        className="w-10 h-10 rounded-full"
-                        />
-                        <div>
-                        <p className="text-sm font-bold text-zinc-800 dark:text-zinc-100">{admin.name}</p>
-                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-300 font-medium">
-                            {admin.role}
-                        </span>
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full font-bold bg-white text-zinc-900 shadow-md shadow-zinc-900 flex justify-center items-center"> 
+                                {nameSign(admin.name)}                            
+                            </div>
+                            <div>
+                            <p className="text-sm font-bold text-zinc-800 dark:text-zinc-100">{admin.name}</p>
+                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-300 font-medium">
+                                {admin.role}
+                            </span>
+                            </div>
                         </div>
-                    </div>
                     </td>
                     <td className="px-6 py-4">
-                    <div className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
-                        <Mail size={14} />
-                        {admin.email}
-                    </div>
+                        <div className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
+                            <Mail size={14} />
+                            {admin.email}
+                        </div>
                     </td>
                     <td className="px-6 py-4">
-                    <div className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
-                        <Phone size={14} />
-                        {admin.phone || 'Unknown'}
-                    </div>
+                        <div className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
+                            <Phone size={14} />
+                            {admin.phone || 'Unknown'}
+                        </div>
                     </td>
                     <td className="px-6 py-4 text-right ">
-                    <button onClick={()=>setSelectedAdmin(admin)} className="p-2 hover:bg-zinc-200 dark:hover:bg-zinc-600 rounded-lg transition-colors relative overflow-visible">
-                        <MoreVertical size={18} className="text-zinc-400" />
-                    </button>
+                        <button onClick={()=>setSelectedAdmin(admin)} className="p-2 hover:bg-zinc-200 dark:hover:bg-zinc-600 rounded-lg transition-colors relative overflow-visible">
+                            <MoreVertical size={18} className="text-zinc-400" />
+                        </button>
                     </td>
                 </tr>
                 ))}

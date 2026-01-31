@@ -17,14 +17,17 @@ export default function AddAdmin({showAdmins}) {
         mutationFn: (e)=>StoreApi(e),
         onSuccess: (data, variable, context)=>{
             if(data.status === "success"){
-                // instead retriev data from server only change cache (best practice of react query)
+                // instead retriev data from server only change cache (best practice of react query)d
                 queryClient.setQueryData(['admins'], (oldData)=>{
                     return {...oldData, admins:[...oldData.admins, data.admin]};
-                })
+                });
+
                 showAdmins();
+
             }
         }
     })
+    
     const addAdminForm = (e) =>{
         e.role = 'admin';
         addAdminMutation.mutate(e)
