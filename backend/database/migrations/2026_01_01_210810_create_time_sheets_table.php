@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('time_sheets', function (Blueprint $table) {
             $table->id();
-            $table->dateTime('arrivalTime')->nullable();
-            $table->dateTime('beforeBreak')->nullable();
-            $table->dateTime('afterBreak')->nullable();
-            $table->dateTime('departureTime')->nullable();
+            $table->time('arrivalTime')->nullable();
+            $table->time('beforeBreak')->nullable();
+            $table->time('afterBreak')->nullable();
+            $table->time('departureTime')->nullable();
             $table->boolean('late')->default(false);
             $table->boolean('sick')->default(false);
             $table->boolean('holiday')->default(false);
