@@ -5,7 +5,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getAllAdminsApi } from '@/services/adminService';
 
 
-export default function ShowPosts({addPost, postSelected }) {
+export default function ShowPosts({addPost, postSelected, deletePost }) {
     const [searchPost, setSearchPost] = useState('');
 
     const queryClient = useQueryClient();
@@ -91,7 +91,7 @@ export default function ShowPosts({addPost, postSelected }) {
                                     <SquarePen size={18} className="text-zinc-400" />
                                 </button>
 
-                                <button className="p-2 hover:bg-red-200 dark:hover:bg-red-500/20 rounded-lg transition-colors relative overflow-visible">
+                                <button onClick={()=>deletePost(post)} className="p-2 hover:bg-red-200 dark:hover:bg-red-500/20 rounded-lg transition-colors relative overflow-visible">
                                     <Trash size={18} className="text-red-500" />
                                 </button>
                             </td>
