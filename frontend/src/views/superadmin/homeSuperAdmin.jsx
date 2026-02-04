@@ -35,10 +35,10 @@ export default function HomeSuperAdmin() {
   })
   
   // retriev employees
-  const {data: employees, isLoading: employeesLoading }=useQuery({
-    queryKey: ['employees'],
-    queryFn: getAllEmployeesApi
-  })
+  // const {data: employees, isLoading: employeesLoading }=useQuery({
+  //   queryKey: ['employees'],
+  //   queryFn: getAllEmployeesApi
+  // })
 
   // retriev posts
   const {data: posts, isLoading: postsLoading} = useQuery({

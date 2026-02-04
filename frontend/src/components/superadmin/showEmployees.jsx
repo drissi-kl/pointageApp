@@ -2,27 +2,27 @@ import React, { useMemo, useState } from 'react'
 import { Search, Mail, Phone, MoreVertical, UserPlus, ShieldCheck } from 'lucide-react';
 import Actions from '../actions/actions';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { getAllAdminsApi } from '@/services/adminService';
+
 
 export default function ShowEmployees({addEmployee}) {
-    const [searchAdmin, setSearchAdmin] = useState('');
+    const [searchEmployee, setSearchEmployee] = useState('');
 
     const queryClient = useQueryClient();
     
     // retriev admin from cache not server
-    const admins = queryClient.getQueryData(['admins']);
+    const employees = queryClient.getQueryData(['employees']);
 
     // for filter admins by name or email
-    const filteredAdmins = useMemo(
+    const filteredEmpolyees = useMemo(
         ()=>{
-            return admins?.admins?.filter(admin => 
-                admin.name.toLowerCase().includes(searchAdmin.toLowerCase()) || admin.email.toLowerCase().includes(searchAdmin.toLowerCase())
+            return employees?.employees?.filter(employee => 
+                employee.name.toLowerCase().includes(searchEmployee.toLowerCase()) || employee.email.toLowerCase().includes(searchEmployee.toLowerCase())
             );
-        }, [searchAdmin]
+        }, [searchEmployee]
     )
 
 
-    const [selectedAdmin, setSelectedAdmin]=useState(null)
+    const [selectedEmployee, setSelectedEmployee]=useState(null)
 
 
 
@@ -36,14 +36,14 @@ export default function ShowEmployees({addEmployee}) {
             <div>
             <h1 className="text-2xl font-bold text-zinc-800 dark:text-white flex items-center gap-2">
                 <ShieldCheck className="text-blue-600" />
-                Admin Management
+                Employees Management
             </h1>
             <p className="text-zinc-500 dark:text-zinc-400">Manage system administrators and their contact details.</p>
             </div>
             
             <button onClick={()=>addEmployee()} className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 shadow-sm transition-all duration-300">
                 <UserPlus size={18} />
-                Add New Admin
+                Add New Employee
             </button>
         </header>
 
@@ -52,9 +52,9 @@ export default function ShowEmployees({addEmployee}) {
             <Search className="text-zinc-400 mr-2" size={20} />
             <input 
                 type="text" 
-                placeholder="Search admins by name..." 
+                placeholder="Search employee by name..." 
                 className="bg-transparent border-none focus:ring-0 text-zinc-700 dark:text-zinc-200 text-sm w-full"
-                onChange={(e) => setSearchAdmin(e.target.value)}
+                onChange={(e) => setSearchEmployee(e.target.value)}
             />
         </div>
 
@@ -70,33 +70,33 @@ export default function ShowEmployees({addEmployee}) {
                 </tr>
             </thead>
             <tbody className="divide-y divide-zinc-100 dark:divide-zinc-700">
-                {filteredAdmins && filteredAdmins.map((admin) => (
-                <tr key={admin.id} className="hover:bg-zinc-50 dark:hover:bg-zinc-700/30 transition-colors duration-200 group">
+                {filteredEmpolyees && filteredEmpolyees.map((employee) => (
+                <tr key={employee.id} className="hover:bg-zinc-50 dark:hover:bg-zinc-700/30 transition-colors duration-200 group">
                     <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                         <img 
-                        src={`https://ui-avatars.com/api/?name=${admin.name}&background=random&color=fff`} 
+                        src={`https://ui-avatars.com/api/?name=${employee.name}&background=random&color=fff`} 
                         alt="avatar" 
                         className="w-10 h-10 rounded-full"
                         />
                         <div>
-                        <p className="text-sm font-bold text-zinc-800 dark:text-zinc-100">{admin.name}</p>
-                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-300 font-medium">
-                            {admin.role}
-                        </span>
+                            <p className="text-sm font-bold text-zinc-800 dark:text-zinc-100">{employee.name}</p>
+                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-300 font-medium">
+                                {employee.role}
+                            </span>
                         </div>
                     </div>
                     </td>
                     <td className="px-6 py-4">
                     <div className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
                         <Mail size={14} />
-                        {admin.email}
+                        {employee.email}
                     </div>
                     </td>
                     <td className="px-6 py-4">
                     <div className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
                         <Phone size={14} />
-                        {admin.phone || 'Unknown'}
+                        {employee.phone || 'Unknown'}
                     </div>
                     </td>
                     <td className="px-6 py-4 text-right ">
@@ -109,9 +109,9 @@ export default function ShowEmployees({addEmployee}) {
             </tbody>
             </table>
             
-            {filteredAdmins?.length === 0 && (
+            {filteredEmpolyees?.length === 0 && (
             <div className="p-12 text-center text-zinc-500">
-                No admins found matching "{searchAdmin}"
+                No admins found matching "{searchEmployee}"
             </div>
             )}
         </div>

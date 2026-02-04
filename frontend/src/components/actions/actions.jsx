@@ -68,9 +68,7 @@ export default function Actions({user, closeActions}) {
                     </nav>
                 </aside>
 
-                {/* المحتوى الرئيسي - Main Content Area */}
                 <main className="flex-1 bg-[#09090b] relative overflow-hidden flex flex-col">
-                    {/* تأثير ضوئي خلفي ناعم */}
                     <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-zinc-800/10 blur-[120px] rounded-full -mr-64 -mt-64 pointer-events-none"></div>
                     
                     <div className="flex-1 p-10 overflow-y-auto relative z-10 custom-scrollbar">

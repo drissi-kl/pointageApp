@@ -54,18 +54,9 @@ export default function Sidebar({user}) {
                 <span className="mx-2 text-sm font-medium">Home</span>
             </button>
 
-            {user?.role == 'superadmin' && <button 
-                onClick={()=>dispatch(changePage('admins'))}
-                className={`flex w-full items-center px-3 py-2 transition-colors duration-300 transform rounded-lg
-                    ${page == "admins" ? 
-                    'text-zinc-600 dark:text-zinc-800 dark:bg-zinc-100 ' 
-                    :'text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-zinc-200 hover:text-zinc-700'} `
-                }>
-                <IoIosPerson className="w-5 h-5"/>
-                <span className="mx-2 text-sm font-medium">Admins</span>
-            </button>}
+          
 
-            {['superadmin', 'admin'].includes(user?.role) && <button 
+            { ('superadmin' == user?.role) && <button 
                 onClick={()=>dispatch(changePage('employees'))}
                 className={`flex w-full items-center px-3 py-2 transition-colors duration-300 transform rounded-lg
                     ${page == "employees" ? 
@@ -77,7 +68,7 @@ export default function Sidebar({user}) {
             </button>
             }
 
-            {['superadmin', 'admin'].includes(user?.role) && <button 
+            { ('superadmin' == user?.role) && <button 
                 onClick={()=>dispatch(changePage('scans'))}
                 className={`flex w-full items-center px-3 py-2 transition-colors duration-300 transform rounded-lg
                     ${page == "scans" ? 
@@ -88,7 +79,7 @@ export default function Sidebar({user}) {
                 <span className="mx-2 text-sm font-medium">Scan</span>
             </button>}
 
-            {['superadmin', 'admin'].includes(user?.role) && <button 
+            { ('superadmin' == user?.role) && <button 
                 onClick={()=>dispatch(changePage('posts'))}
                 className={`flex w-full items-center px-3 py-2 transition-colors duration-300 transform rounded-lg
                     ${page == "posts" ? 

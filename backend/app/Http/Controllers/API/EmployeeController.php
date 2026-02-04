@@ -12,7 +12,11 @@ class EmployeeController extends Controller
 
     public function index(){
         try{
-            $employees = User::where('role', 'employee')->with('employee')->get();
+            $employees = User::where('role', 'employee')
+                    ->with('employee')
+                    ->with('timesheet')
+                    ->with('post')
+                    ->get();
             
             
             return response()->json([

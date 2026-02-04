@@ -58,4 +58,8 @@ class User extends Authenticatable
     public function timesheet(){
         return $this->hasMany(TimeSheet::class);
     }
+
+    public function post(){
+        return $this->belongsTo(Post::class);
+    }
 }
