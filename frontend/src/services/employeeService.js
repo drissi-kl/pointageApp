@@ -32,14 +32,14 @@ const getEmployeeApi = async (id)=>{
 
 const createEmployeeApi = async (body)=>{
     try{
-        const response = await baseApi.post(`/store`, body);
+        const response = await baseApi.post(`/employees`, body);
         return response.data;
 
     }catch(error){
         if(axios.isAxiosError(error)){
             throw error;
         }
-        throw new Error('exists error from createEmployeeApi function')
+        throw new Error('exists error from createEmployeeApi function');
     }
 }
 

@@ -4,15 +4,12 @@ import React, { useEffect } from 'react'
 import Sidebar from '@/components/sidebare/sidebar';
 import HomeSuperAdmin from '../superadmin/homeSuperAdmin';
 import { useSelector } from 'react-redux';
-import AdminSuperAdmin from '../superadmin/adminSuperAdmin';
 import EmployeeSuperAdmin from '../superadmin/employeeSuperAdmin';
 import ScanSuperAdmin from '../superadmin/scanSuperAdmin';
 import ReportsSuperAdmin from '../superadmin/reportsSuperAdmin';
 import { useQuery } from '@tanstack/react-query';
 import { currentUserApi } from '@/services/authService';
 import PostsSuperAdmin from '../superadmin/postsSuperAdmin';
-import getToken from '@/utilities/getToken';
-import { useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
 

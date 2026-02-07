@@ -16,7 +16,6 @@ use App\Http\Middleware\createAdimOrEmp;
 // ## start auth routes ##
 Route::controller(AuthController::class)->group(function(){
     Route::post('/register', "register");
-    Route::post('/store', "store");
     Route::post('/login', "login");
     Route::post('/forgetPassword', "forgetPassword");
     Route::post('/resetPassword', "resetPassword");
@@ -31,15 +30,10 @@ Route::middleware(["auth:sanctum"])->controller( AuthController::class)->group(f
 
 
 
-// ## start admin routes
-Route::middleware('auth:sanctum')->controller(AdminController::class)->group(function(){
-    Route::get('/admins', 'index');
-});
-// ## end admin routes
-
 // ## start employee routes
 Route::middleware('auth:sanctum')->controller(EmployeeController::class)->group(function(){
     Route::get('/employees', 'index');
+    Route::post('/employees', "store");
 });
 // ## end employee routes
 

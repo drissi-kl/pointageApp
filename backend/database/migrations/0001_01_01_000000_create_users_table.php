@@ -22,7 +22,7 @@ return new class extends Migration
             
 
             // additional fields
-            $table->enum('role', ["superadmin", "admin", "employee"]);
+            $table->enum('role', ["superadmin", "employee"]);
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

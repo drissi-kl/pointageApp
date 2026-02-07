@@ -88,72 +88,8 @@ class AuthController extends Controller
 
 
 
-    /**
-     * Store a newly created admin or employee
-     */
-    public function store(Request $request)
-    {
-        try{
-            $formFields = $request->validate([
-                "name"=>"required|string",
-                "email"=>"required|email",
-                "phone"=>"required|string",
-                "address"=>"string",
-                "role"=>"required|in:admin,employee"
-            ]);
 
-            $user = User::where('email', $formFields['email'])->first();
-            if($user){
-                return response()->json([
-                    "status" => "fail",
-                    "message" => "this email elready exists, user other"
-                ]);
-            }
 
-            $formFields['password'] = Hash::make("user");
-
-            if($formFields['role'] == "employee"){
-
-                if(!$request->filled('code')){
-                    return response()->json([
-                        "status" => "fail",
-                        "message" => "for create an employee, must be exists a code for scan"
-                    ]);
-                }
-                if(!$request->filled('post_id')){
-                    return response()->json([
-                        "status" => "fail",
-                        "message" => "for create an employee must be selected any post that he belongs"
-                    ]);
-                }
-                
-                $user = User::create($formFields);
-                $formFields['code'] = $request->input('code');
-                $formFields['post_id'] = $request->input('post_id');
-                $formFields['user_id'] = $user->id;
-                $employee = Employee::create($formFields);
-
-                return response()->json([
-                    "status" => "success",
-                    "message" => "create employee ".$user->name." success",
-
-                ]);
-            }else if($formFields['role'] == "admin" ){
-                $user = User::create($formFields);
-                return response()->json([
-                    "status" => "success",
-                    "message" => "create admin ".$user->name." success",
-                    "admin" => $user
-                ]);
-            }
-
-        }catch(Exception $e){
-            return response()->json([
-                "status"=>"error",
-                "message"=>$e->getMessage()
-            ]);
-        }
-    }
 
 
     /**

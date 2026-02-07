@@ -3,8 +3,8 @@ import React from 'react'
 import {ShieldCheck} from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { error } from 'three/src/utils.js';
-import { StoreApi } from '@/services/authService';
+
+import { createEmployeeApi } from '@/services/employeeService';
 
 export default function AddEmployee({showEmployees}) {
     const queryClient = useQueryClient();
@@ -13,34 +13,35 @@ export default function AddEmployee({showEmployees}) {
     const {errors}=formState
 
 
-    const addAdminMutation = useMutation({
-        mutationFn: (e)=>StoreApi(e),
+    const addEmployeeMutation = useMutation({
+        mutationFn: (e)=>createEmployeeApi(e) ,
         onSuccess: (data, variable, context)=>{
+            
             if(data.status === "success"){
+                console.log(data)
                 // instead retriev data from server only change cache (best practice of react query)
-                queryClient.setQueryData(['admins'], (oldData)=>{
-                    return {...oldData, admins:[...oldData.admins, data.admin]};
+                queryClient.setQueryData(['employees'], (oldData)=>{
+                    return {...oldData, employees:[...oldData.employees, data.employee]};
                 })
                 showEmployees();
             }
         }
     })
-    const addAdminForm = (e) =>{
+    const addEmployeeForm = (e) =>{
         e.role = 'employee';
-        console.log(e);
-        // addAdminMutation.mutate(e)
+        // console.log(e)
+        addEmployeeMutation.mutate(e)
     }
 
 
     const posts = queryClient.getQueryData(['posts']);
-    console.log('posts', posts);
 
     return (
         <main className="flex-1 bg-zinc-50 dark:bg-zinc-900 min-h-screen p-8">
         <header className='flex justify-between'>
             <h1 className="text-2xl font-bold text-zinc-800 dark:text-white flex items-center gap-2">
                 <ShieldCheck className="text-blue-600" />
-                Add Admin
+                Add Employee
             </h1>
             <button onClick={()=>showEmployees()} className='bg-blue-600 hover:bg-blue-700 transition-all duration-300 rounded-md  text-white font-semibold px-4 py-2' >Employees</button>
         </header>
@@ -49,7 +50,7 @@ export default function AddEmployee({showEmployees}) {
         <div className="mt-10">
             <h2 className="text-2xl font-bold text-white mb-6">Contact Information</h2>
             
-            <form onSubmit={handleSubmit(addAdminForm)} className="space-y-6">
+            <form onSubmit={handleSubmit(addEmployeeForm)} className="space-y-6">
                 {/* Grid Container */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 md:grid-cols-1 gap-6">
                 
@@ -145,8 +146,8 @@ export default function AddEmployee({showEmployees}) {
 
                 {/* Submit Button */}
                 <div className="pt-4 border-t border-zinc-800">
-                <button className={`w-full md:w-max px-6 py-3 ${addAdminMutation.isPending ? 'bg-blue-900' : 'bg-blue-600' }  bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-lg shadow-blue-900/20 transition-all duration-200 transform active:scale-95`}>
-                    {addAdminMutation.isPending ? "Create ..." : "Create"} 
+                <button className={`w-full md:w-max px-6 py-3 ${addEmployeeMutation.isPending ? 'bg-blue-900' : 'bg-blue-600' }  bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-lg shadow-blue-900/20 transition-all duration-200 transform active:scale-95`}>
+                    {addEmployeeMutation.isPending ? "Create ..." : "Create"} 
                 </button>
                 </div>
             </form>

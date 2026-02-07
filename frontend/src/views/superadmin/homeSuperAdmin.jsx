@@ -28,17 +28,12 @@ export default function HomeSuperAdmin() {
 
   const dispatch = useDispatch();
 
-  // retriev admins
-  const {data: admins, isLoading: adminsLoading }=useQuery({
-    queryKey: ['admins'],
-    queryFn: getAllAdminsApi
-  })
   
   // retriev employees
-  // const {data: employees, isLoading: employeesLoading }=useQuery({
-  //   queryKey: ['employees'],
-  //   queryFn: getAllEmployeesApi
-  // })
+  const {data: employees, isLoading: employeesLoading }=useQuery({
+    queryKey: ['employees'],
+    queryFn: getAllEmployeesApi
+  })
 
   // retriev posts
   const {data: posts, isLoading: postsLoading} = useQuery({
@@ -50,7 +45,7 @@ export default function HomeSuperAdmin() {
 
   // console.log('home super admin user', user)
 
-  if(adminsLoading || employeesLoading){
+  if(employeesLoading){
     return <p>loading admins and employees</p>
   }
   
@@ -101,7 +96,7 @@ export default function HomeSuperAdmin() {
       </div>
       <div>
         <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Admins</p>
-        <h3 className="text-2xl font-bold text-zinc-800 dark:text-white"> {admins?.admins?.length || 0} </h3>
+        <h3 className="text-2xl font-bold text-zinc-800 dark:text-white"> { 0} </h3>
       </div>
     </div>
 

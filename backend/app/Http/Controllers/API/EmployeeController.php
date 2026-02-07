@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Employee;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class EmployeeController extends Controller
 {
@@ -27,6 +29,58 @@ class EmployeeController extends Controller
             return response()->json([
                 'status'=>'error',
                 'message'=>$e->getMessage()
+            ]);
+        }
+    }
+
+
+    public function store(Request $request)
+    {
+        try{
+            $formFields = $request->validate([
+                "name"=>"required|string",
+                "email"=>"required|email",
+                "phone"=>"required|string",
+                "address"=>"string",
+                "role"=>"required"
+            ]);
+
+            $user = User::where('email', $formFields['email'])->first();
+            if($user){
+                return response()->json([
+                    "status" => "fail",
+                    "message" => "this email elready exists, use other"
+                ]);
+            }
+
+            if(!$request->filled('post')){
+                return response()->json([
+                    "status" => "fail",
+                    "message" => "for create an employee must be selected any post that he belongs"
+                ]);
+            }
+
+            $formFields['password'] = Hash::make("user");
+
+            
+            $user = User::create($formFields);
+            $formFields['code'] = $user->id."/".$user->email."/".$user->created_at;
+            $formFields['post_id'] = $request->input('post');
+            $formFields['user_id'] = $user->id;
+            $employee = Employee::create($formFields);
+            $user->load('employee');
+
+            return response()->json([
+                "status" => "success",
+                "message" => "create employee ".$user->name." success",
+                "employee" => $user
+            ]);
+           
+
+        }catch(Exception $e){
+            return response()->json([
+                "status"=>"error",
+                "message"=>$e->getMessage()
             ]);
         }
     }
