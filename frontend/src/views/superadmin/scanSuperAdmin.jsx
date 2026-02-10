@@ -17,21 +17,33 @@ export default function ScanSuperAdmin() {
           async (result) => {
             try {
               qrScannerRef.current.stop();
-              console.log("scanner data", result.data);
+              let payload = result.data.match(/[A-Za-z0-9 @"':,{}\.]+/g);
+              payload = JSON.parse(payload);
+              console.log(payload);
+              // console.log("result scanner", JSON.parse(payload[0]));
+
               setTimeout(() => {
                 qrScannerRef.current.start();
               }, 3000);
 
             } catch (error) {
-              console.log(error);
+              console.log("error scanner", error);
+              setTimeout(() => {
+                qrScannerRef.current.start();
+              }, 3000);
             }
           },
           {
             highlightScanRegion: true,
             highlightCodeOutline: true
-          },
-
+          }
         )
+        try{
+          qrScannerRef.current.start();
+          console.log('scanner start');
+        }catch(error){
+          console.log('error', error);
+        }
       }
 
       return () => {
@@ -70,31 +82,29 @@ export default function ScanSuperAdmin() {
 
       {/* Main Scanner Card */}
       <section className="relative group mb-12">
-        <div className="relative bg-white dark:bg-zinc-900 h-[350px] w-full max-w-4xl mx-auto rounded-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col justify-center items-center shadow-sm">
-          {
-            scanning ? <>
-              <video playsInline ref={videoRef}></video>
-              <button onClick={() => setScanning(false)} className='bg-zinc-300 rounded-full p-3'>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </>
-              : <>
-                <div className="bg-zinc-100 dark:bg-zinc-800 p-6 rounded-full mb-4">
-                  <Scan size={48} className="text-zinc-400 dark:text-zinc-600" />
-                </div>
-                <p className="text-zinc-500 dark:text-zinc-400 font-medium text-xl italic">
-                  Scanner Standby
-                </p>
-                <button onClick={() => setScanning(true)} className="mt-6 px-6 py-2 bg-zinc-900 dark:bg-white dark:text-black text-white rounded-lg font-semibold hover:scale-105 transition-transform">
-                  Turn On Scanner
-                </button>
-              </>
-          }
+        {
+          scanning ? <div className="relative bg-white dark:bg-zinc-900 h-[400px] w-full max-w-4xl mx-auto rounded-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col justify-center items-center shadow-sm">
+            <video className='h-[95%] w-[95%] rounded-lg ' playsInline ref={videoRef}></video>
+            <button onClick={() => setScanning(false)} className='bg-zinc-300 rounded-full p-2 absolute bottom-[10px]'>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-8">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          : <div className="relative bg-white dark:bg-zinc-900 h-[400px] w-full max-w-4xl mx-auto rounded-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col justify-center items-center shadow-sm">
+            <div className="bg-zinc-100 dark:bg-zinc-800 p-6 rounded-full mb-4">
+              <Scan size={48} className="text-zinc-400 dark:text-zinc-600" />
+            </div>
+            <p className="text-zinc-500 dark:text-zinc-400 font-medium text-xl italic">
+              Scanner Standby
+            </p>
+            <button onClick={() => setScanning(true)} className="mt-6 px-6 py-2 bg-zinc-900 dark:bg-white dark:text-black text-white rounded-lg font-semibold hover:scale-105 transition-transform">
+              Turn On Scanner
+            </button>
+          </div>
+        }
 
 
-        </div>
       </section>
 
       {/* Activity Table */}
@@ -125,7 +135,7 @@ export default function ScanSuperAdmin() {
                         <span className="font-medium text-zinc-900 dark:text-zinc-100">{scan.name}</span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-zinc-600 dark:text-zinc-400 font-mono text-sm">{scan.time} AM</td>
+                    <td className="px-6 py-4 text-zinc-600 dark:text-zinc-400 font-mono text-sm">{scan.time}</td>
                     <td className="px-6 py-4">
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
                         {scan.type}
@@ -134,10 +144,6 @@ export default function ScanSuperAdmin() {
                   </tr>
                 })
               }
-
-
-
-
 
             </tbody>
           </table>
