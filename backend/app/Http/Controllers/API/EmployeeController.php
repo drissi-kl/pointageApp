@@ -64,7 +64,7 @@ class EmployeeController extends Controller
 
             
             $user = User::create($formFields);
-            $formFields['code'] = '{"id":'.$user->id.',"name":"'.$user->name.'","email":"'.$user->email.'","created_at":"'.$user->created_at.'"}';
+            $formFields['code'] = '{"id":'.$user->id.',"name":"'.$user->name.'","email":"'.$user->email.'","createdAt":"'.$user->created_at.'"}';
             $formFields['post_id'] = $request->input('post');
             $formFields['user_id'] = $user->id;
             $employee = Employee::create($formFields);

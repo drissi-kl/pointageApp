@@ -3,9 +3,9 @@ import baseApi from "./customApi"
 
 
 
-const createSheetApi = async (body) => {
+const createTimeSheetApi = async (body) => {
     try{
-        const response = await baseApi.post(`/post`, body);
+        const response = await baseApi.post(`/timesheet`, body);
         return response.data;
 
     }catch(error){
@@ -21,7 +21,7 @@ const createSheetApi = async (body) => {
 
 
 
-export {createSheetApi,  };
+export {createTimeSheetApi,  };
 
 
 

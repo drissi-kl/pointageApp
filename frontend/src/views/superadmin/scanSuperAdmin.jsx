@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Scan, Clock, User, Shield, Check, ScanQrCode } from 'lucide-react'; // Suggested icons
 import nameSign from '@/utilities/nameSign';
 import QrScanner from 'qr-scanner';
+import { useMutation } from '@tanstack/react-query';
+import { createTimeSheetApi } from '@/services/timesheet';
 
 
 export default function ScanSuperAdmin() {
@@ -9,6 +11,13 @@ export default function ScanSuperAdmin() {
   const [scanning, setScanning] = useState(true);
   const videoRef = useRef(null);
   const qrScannerRef = useRef(null);
+
+  const timesheetMutation = useMutation({
+    mutationFn: (e) => createTimeSheetApi(e),
+    onSuccess: (data, variable, context) => {
+      console.log('timesheetMutation', data);
+    }
+  });
 
   useEffect(() => {
       if (videoRef.current && scanning ) {
@@ -18,10 +27,11 @@ export default function ScanSuperAdmin() {
             try {
               qrScannerRef.current.stop();
               let payload = result.data.match(/[A-Za-z0-9 @"':,{}\.]+/g);
-              payload = JSON.parse(payload);
-              console.log(payload);
-              // console.log("result scanner", JSON.parse(payload[0]));
-
+              if(payload){
+                payload = JSON.parse(payload);
+                const drissi = {name: payload.name, email: payload.email, created_at: payload.createdAt};
+                timesheetMutation.mutate(drissi);
+              }              
               setTimeout(() => {
                 qrScannerRef.current.start();
               }, 3000);

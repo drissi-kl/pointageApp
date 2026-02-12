@@ -49,6 +49,7 @@ class TimesheetContoller extends Controller
                     ->where('created_at', $empInfo['created_at'])
                     ->first();
 
+
             if($user){
                 $timesheet = TimeSheet::where('user_id', $user->id)->first();
                 if(!$timesheet){
@@ -59,21 +60,36 @@ class TimesheetContoller extends Controller
 
                     return response()->json([
                         'status' => 'success',
-                        'message' => 'create timesheet success',
+                        'message' => 'Arrival time has been successfully recorded',
                         'scanner' => $newTimeSheet
                     ]);
 
                 }else if(!$timesheet->beforeBreak){
                     $timesheet->beforeBreak = now();
                     $timesheet->save();
+                    return response()->json([
+                        'status' => 'success',
+                        'message' => 'Before break time has been successfully recorded',
+                        'scanner' => $timesheet
+                    ]);
 
                 }else if(!$timesheet->afterBreak){
-                    $timesheet->beforeBreak = now();
+                    $timesheet->afterBreak = now();
                     $timesheet->save();
+                    return response()->json([
+                        'status' => 'success',
+                        'message' => 'After break time has been successfully recorded',
+                        'scanner' => $timesheet
+                    ]);
 
                 }else if(!$timesheet->departureTime){
                     $timesheet->departureTime = now();
                     $timesheet->save();
+                    return response()->json([
+                        'status' => 'success',
+                        'message' => 'Departure time has been successfully recorded',
+                        'scanner' => $timesheet
+                    ]);
 
                 }else{
                     return response()->json([
