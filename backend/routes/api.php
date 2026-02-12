@@ -65,8 +65,8 @@ Route::middleware(['auth:sanctum'])->controller(ExceptionalTimeController::class
 
 // ## start scan routes
 Route::controller(TimesheetContoller::class)->group(function(){
-    Route::get("/timesheet", "index");
-    Route::post("/timesheet", "store");
+    Route::get("/timesheets", "index");
+    Route::post("/timesheets", "store");
 });
 // ## end scan routes
 
