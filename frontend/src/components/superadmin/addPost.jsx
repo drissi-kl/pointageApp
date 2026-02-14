@@ -27,8 +27,10 @@ export default function AddPost({showPosts}) {
             }
         }
     })
+
     const addPostForm = (e) =>{
-        addPostMutation.mutate(e)
+        // console.log(e);
+        addPostMutation.mutate(e);
     }
 
 
@@ -77,6 +79,20 @@ export default function AddPost({showPosts}) {
                             className="px-4 py-2.5 bg-zinc-800 border border-zinc-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200 placeholder:text-zinc-500"
                         />
                         {errors.name && <p className='text-red-500 text-sm'>{errors.arrivalTime.message}</p>}
+                    </div>
+
+                    {/* Daily Hour Field */}
+                    <div className="flex flex-col gap-2">
+                        <label className="text-sm font-medium text-zinc-400 ml-1">Daily Hours *</label>
+                        <input 
+                            type="time" 
+                            {...register('dailyHours', {
+                                required:{value:true, message:"daily hour is required for create post"}
+                            })} 
+                            placeholder="enter daily hour for this post"
+                            className="px-4 py-2.5 bg-zinc-800 border border-zinc-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200 placeholder:text-zinc-500"
+                        />
+                        {errors.name && <p className='text-red-500 text-sm'>{errors.dailyHours.message}</p>}
                     </div>
 
                   

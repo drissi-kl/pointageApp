@@ -10,7 +10,7 @@ class Post extends Model
     use HasFactory;
 
     protected $table = "posts";
-    protected $fillable = ['name', 'arrivalTime'];
+    protected $fillable = ['name', 'arrivalTime', 'dailyHours'];
 
     public function users(){
         return $this->hasMany(User::class);

@@ -3,6 +3,8 @@ import { Search, MoreVertical, Clock7, FlagTriangleLeft, Plus, Trash, SquarePen 
 import Actions from '../actions/actions';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getAllAdminsApi } from '@/services/adminService';
+import timeFormat from '@/utilities/timeFormat';
+
 
 
 export default function ShowPosts({addPost, postSelected, deletePost }) {
@@ -23,7 +25,6 @@ export default function ShowPosts({addPost, postSelected, deletePost }) {
             );
         }, [searchPost]
     )
-
 
 
     
@@ -65,6 +66,7 @@ export default function ShowPosts({addPost, postSelected, deletePost }) {
                     <tr className="bg-zinc-50 dark:bg-zinc-800/50 border-b border-zinc-100 dark:border-zinc-700">
                     <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Post Name</th>
                     <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Arrival Time</th>
+                    <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Daily Hours</th>
                     <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 text-right">Actions</th>
                     </tr>
                 </thead>
@@ -82,7 +84,14 @@ export default function ShowPosts({addPost, postSelected, deletePost }) {
                             <td className="px-6 py-4">
                                 <div className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
                                     <Clock7 size={14} />
-                                    {post.arrivalTime}
+                                    {timeFormat(post.arrivalTime)}
+                                </div>
+                            </td>
+
+                            <td className="px-6 py-4">
+                                <div className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
+                                    <Clock7 size={14} />
+                                    {timeFormat(post.dailyHours)}
                                 </div>
                             </td>
                         

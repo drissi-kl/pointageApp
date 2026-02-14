@@ -37,7 +37,8 @@ class PostController extends Controller
         try{
             $formField = $request->validate([
                 'name'=>'required|string|min:2',
-                "arrivalTime" => "required|date_format:H:i"
+                "arrivalTime" => "required|date_format:H:i",
+                "dailyHours" => "required|date_format:H:i"
             ]);
 
             $post = Post::create($formField);
@@ -101,6 +102,7 @@ class PostController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => "update post successful",
+                'post' => $post
             ]);
 
         }catch(Exception $e){

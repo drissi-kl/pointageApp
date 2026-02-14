@@ -28,8 +28,8 @@ export default function UpdatePost({ showPosts, post }) {
                 // instead retriev data from server only change cache (best practice of react query)
                 queryClient.setQueryData(['posts'], (oldData) => {
                     const updatePosts = oldData.posts.map((post) => { 
-                        if(post.id == variable.id ){
-                            return {...post, name: variable.body.name, arrivalTime: variable.body.arrivalTime,}
+                        if(post.id == data.post.id ){
+                            return {...post, name: data.post.name, arrivalTime: data.post.arrivalTime, dailyHours: data.post.dailyHours }
                         }else{
                             return post;
                         }
@@ -47,6 +47,7 @@ export default function UpdatePost({ showPosts, post }) {
             id: post.id,
             body: e
         };
+        // console.log(data);
         updatePostMutation.mutate(data);
     }
 
@@ -75,7 +76,7 @@ export default function UpdatePost({ showPosts, post }) {
                             <input
                                 type="text"
                                 {...register('name', {
-                                    required: { value: true, message: "post name is required for create post" }
+                                    required: { value: true, message: "post name is required" }
                                 })}
                                 placeholder="enter name of post"
                                 className="px-4 py-2.5 bg-zinc-800 border border-zinc-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200 placeholder:text-zinc-500"
@@ -90,12 +91,27 @@ export default function UpdatePost({ showPosts, post }) {
                             <input
                                 type="time"
                                 {...register('arrivalTime', {
-                                    required: { value: true, message: "arrival time is required for create post" }
+                                    required: { value: true, message: "arrival time is required" }
                                 })}
                                 placeholder="enter arrival time for this post"
                                 className="px-4 py-2.5 bg-zinc-800 border border-zinc-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200 placeholder:text-zinc-500"
                             />
                             {errors.name && <p className='text-red-500 text-sm'>{errors.arrivalTime.message}</p>}
+                        </div>
+
+
+                        {/* Daily Hours Field */}
+                        <div className="flex flex-col gap-2">
+                            <label className="text-sm font-medium text-zinc-400 ml-1">Daily Hours *</label>
+                            <input
+                                type="time"
+                                {...register('dailyHours', {
+                                    required: { value: true, message: "daily hours is required" }
+                                })}
+                                placeholder="enter daily hours for this post"
+                                className="px-4 py-2.5 bg-zinc-800 border border-zinc-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200 placeholder:text-zinc-500"
+                            />
+                            {errors.dailyHours && <p className='text-red-500 text-sm'>{errors.dailyHours.message}</p>}
                         </div>
 
 
