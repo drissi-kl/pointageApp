@@ -13,7 +13,7 @@ export default function UpdatePost({ showPosts, post }) {
 
     const { register, handleSubmit, reset, formState } = useForm({
         defaultValues: {
-            name: post.name, arrivalTime: post.arrivalTime
+            name: post.name, arrivalTime: post.arrivalTime, dailyHours: post.dailyHours
         }
     });
     const { errors } = formState

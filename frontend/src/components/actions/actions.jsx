@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import { Sheet, UserRoundX, AlarmClockCheck, CalendarCheck, X, ChevronRight } from 'lucide-react'
+import { Sheet, UserRoundX, AlarmClockCheck, CalendarCheck, X, ChevronRight, ScanQrCode  } from 'lucide-react'
 
 import Timesheet from './timesheet';
 import ExceptionalTime from './exceptionalTime';
 import Holiday from './holiday';
 import DeleteUser from './deleteUser';
+import Qrcode from './qrcode';
 
 export default function Actions({user, closeActions}) {
     const [action, setAction] = useState('timesheet');
@@ -27,6 +28,7 @@ export default function Actions({user, closeActions}) {
                             { id: 'timesheet', name: 'Timesheet', icon: Sheet },
                             { id: 'exceptionaltime', name: 'Exceptional Time', icon: AlarmClockCheck },
                             { id: 'holiday', name: 'Holiday', icon: CalendarCheck },
+                            { id: 'qrcode', name: 'Qr Code', icon: ScanQrCode },
                         ].map((item) => (
                             <button 
                                 key={item.id}
@@ -76,6 +78,7 @@ export default function Actions({user, closeActions}) {
                             {action === "timesheet" && <Timesheet user={user} />}
                             {action === "exceptionaltime" && <ExceptionalTime user={user} />}
                             {action === "holiday" && <Holiday user={user} />}
+                            {action === "qrcode" && <Qrcode user={user} />}
                             {action === "delete" && <DeleteUser user={user} />}
                         </div>
                     </div>
