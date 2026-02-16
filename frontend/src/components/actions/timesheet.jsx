@@ -160,10 +160,10 @@ export default function Timesheet({ user }) {
                             {timesheet?.map((timesheet, index) => {
                                 return <tr key={index} className="hover:bg-zinc-800/30 transition-colors group">
                                     <td className="px-6 py-4 font-medium text-zinc-200">Nov 23, 2026</td>
-                                    <td className="px-6 py-4 text-zinc-400 group-hover:text-zinc-200">{timeFormat(timesheet?.arrivalTime)}</td>
-                                    <td className="px-6 py-4 text-zinc-500">{timeFormat(timesheet?.beforeBreak)}</td>
-                                    <td className="px-6 py-4 text-zinc-500">{timeFormat(timesheet?.afterBreak)}</td>
-                                    <td className="px-6 py-4 text-zinc-400 group-hover:text-zinc-200">{timeFormat(timesheet?.departureTime)}</td>
+                                    <td className="px-6 py-4 text-zinc-400 group-hover:text-zinc-200">{timeFormat(timesheet?.arrivalTime) || "-"}</td>
+                                    <td className="px-6 py-4 text-zinc-500">{timeFormat(timesheet?.beforeBreak) || "-"}</td>
+                                    <td className="px-6 py-4 text-zinc-500">{timeFormat(timesheet?.afterBreak) || "-"}</td>
+                                    <td className="px-6 py-4 text-zinc-400 group-hover:text-zinc-200">{timeFormat(timesheet?.departureTime) || "-"}</td>
                                     <td className="px-6 py-4 text-right">
                                         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
                                             <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse"></div>

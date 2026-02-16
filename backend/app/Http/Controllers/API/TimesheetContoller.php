@@ -51,7 +51,9 @@ class TimesheetContoller extends Controller
 
 
             if($user){
-                $timesheet = TimeSheet::where('user_id', $user->id)->first();
+                $timesheet = TimeSheet::where('user_id', $user->id)
+                ->whereDate('created_at', now()->format('Y-m-d'))
+                ->first();
                 if(!$timesheet){
                     $newTimeSheet = TimeSheet::create([
                         'user_id' => $user->id,

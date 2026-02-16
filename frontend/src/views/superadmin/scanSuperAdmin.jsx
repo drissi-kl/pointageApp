@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Scan, Clock, User, Shield, Check, ScanQrCode } from 'lucide-react'; // Suggested icons
 import nameSign from '@/utilities/nameSign';
 import QrScanner from 'qr-scanner';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createTimeSheetApi } from '@/services/timesheet';
 
 
@@ -12,10 +12,24 @@ export default function ScanSuperAdmin() {
   const videoRef = useRef(null);
   const qrScannerRef = useRef(null);
 
+  const queryClient = useQueryClient();
+
   const timesheetMutation = useMutation({
     mutationFn: (e) => createTimeSheetApi(e),
     onSuccess: (data, variable, context) => {
-      console.log('timesheetMutation', data);
+      
+      queryClient.setQueryData(["employees"], (oldData)=>{
+      //   // oldData.map((employee)=>{
+      //   //   if(employee.email == variable.email && employee.name == variable.name && employee.created_at == variable.created_at){
+
+      //   //   }
+      //   // })
+        // const emp = oldData.find((employee) => {return employee.email == variable.email && employee.name == variable.name && employee.created_at == variable.created_at} )
+        
+        console.log('our employee', oldData);
+      })
+
+      // console.log('timesheetMutation', data);
     }
   });
 
