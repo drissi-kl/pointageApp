@@ -17,19 +17,24 @@ export default function ScanSuperAdmin() {
   const timesheetMutation = useMutation({
     mutationFn: (e) => createTimeSheetApi(e),
     onSuccess: (data, variable, context) => {
-      
       queryClient.setQueryData(["employees"], (oldData)=>{
-      //   // oldData.map((employee)=>{
-      //   //   if(employee.email == variable.email && employee.name == variable.name && employee.created_at == variable.created_at){
-
-      //   //   }
-      //   // })
-        // const emp = oldData.find((employee) => {return employee.email == variable.email && employee.name == variable.name && employee.created_at == variable.created_at} )
-        
-        console.log('our employee', oldData);
+        const employees = oldData?.employees?.map((employee)=>{
+          if(employee.email == variable.email && employee.name == variable.name){
+            if(data.message == "Arrival time has been successfully recorded"){
+              employee.timesheet.push(data.scanner);
+              return employee;
+            }else{
+              const indexTS = employee?.timesheet?.findIndex((items)=>{return items.id == data.scanner.id}) 
+              employee.timesheet[indexTS] = data.scanner;
+              return employee;
+            }
+            
+          }else{
+            return employee
+          }
+        })
+        return {...oldData, employees: employees}
       })
-
-      // console.log('timesheetMutation', data);
     }
   });
 
