@@ -34,6 +34,7 @@ Route::middleware(["auth:sanctum"])->controller( AuthController::class)->group(f
 Route::middleware('auth:sanctum')->controller(EmployeeController::class)->group(function(){
     Route::get('/employees', 'index');
     Route::post('/employees', "store");
+    Route::delete('/employees/{id}', "delete");
 });
 // ## end employee routes
 

@@ -46,7 +46,7 @@ const createEmployeeApi = async (body)=>{
 
 const deleteEmployeeApi = async (id)=>{
     try{
-        const response = await baseApi.delete(`/store/${id}`, );
+        const response = await baseApi.delete(`/employees/${id}`, );
         return response.data;
 
     }catch(error){

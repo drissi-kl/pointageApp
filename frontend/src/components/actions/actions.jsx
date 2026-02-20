@@ -79,7 +79,7 @@ export default function Actions({user, closeActions}) {
                             {action === "exceptionaltime" && <ExceptionalTime user={user} />}
                             {action === "holiday" && <Holiday user={user} />}
                             {action === "qrcode" && <Qrcode user={user} />}
-                            {action === "delete" && <DeleteUser user={user} />}
+                            {action === "delete" && <DeleteUser user={user} closeActions = {()=>closeActions()} />}
                         </div>
                     </div>
                 </main>

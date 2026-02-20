@@ -96,17 +96,10 @@ class EmployeeController extends Controller
                 ]);    
             }
 
-            if($user->role !== 'employee'){
-                return response()->json([
-                    'status'=>'fail',
-                    'message'=>"this user not employee, it is $user->role"
-                ]); 
-            }
-
             $user->delete();
             return response()->json([
                 'status'=>'success',
-                'message'=>"delete employee $user->name successfully"
+                'message'=>"delete employee $user->name successfully",
             ]);
 
         }catch(Exception $e){
