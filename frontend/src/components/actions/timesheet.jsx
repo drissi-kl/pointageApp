@@ -26,10 +26,24 @@ export default function Timesheet({ user }) {
         if(t.sick){
             // return user.
         }
-        const arrivalTime = t?.arrivalTime;
-        const beforeBreak = t?.beforeBreak;
-        const afterBreak = t?.afterBreak;
-        const departureTime = t?.departureTime;
+
+        let arrivalTime, beforeBreak, afterBreak, departureTime = null;
+        if(t.arrivalTime){
+            arrivalTime = new Date(t.arrivalTime);
+        }
+
+
+
+        let s = 0;
+        if(departureTime){
+            s = (new Date(beforeBreak)) - (new Date(arrivalTime));
+        } else if(afterBreak){
+
+        }
+
+
+
+
         if(arrivalTime && beforeBreak){
             let s = 0;
             s = (new Date(beforeBreak)) - (new Date(arrivalTime));
@@ -37,15 +51,18 @@ export default function Timesheet({ user }) {
                 s += (new Date(departureTime)) - (new Date(afterBreak));
             }
             return s;
-        }else{
-
+        }else if(arrivalTime){
+            let s = 0;
+            const currentDate = new Date();
+            s = currentDate - (new Date(arrivalTime));
+            return 0;
         }
     }
 
      
     const timesheet = useMemo(
         () => {
-            return user.timesheet.filter((tm)=>{return compareDates(tm.created_at, year, month)})
+            return user?.timesheet?.filter((tm)=>{return compareDates(tm.created_at, year, month)})
         },[year, month]
     )
 
@@ -179,8 +196,8 @@ export default function Timesheet({ user }) {
 
                 :<div className="flex flex-col items-center justify-center p-12 rounded-xl border-2 border-dashed border-zinc-700 bg-zinc-900/50 text-zinc-400">
                     <div className="mb-4 text-zinc-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-8">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
                         </svg>
 
                     </div>
