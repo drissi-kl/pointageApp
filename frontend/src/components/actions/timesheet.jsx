@@ -1,3 +1,5 @@
+import dateFormat from '@/utilities/dateFormat';
+import secondsToHours from '@/utilities/secondsToHours';
 import timeFormat from '@/utilities/timeFormat';
 import { Sheet, CalendarDays, Clock } from 'lucide-react'
 import React, { useMemo, useState } from 'react'
@@ -5,66 +7,72 @@ import React, { useMemo, useState } from 'react'
 export default function Timesheet({ user }) {
 
     console.log('user', user);
-    
+
 
     const years = [2026, 2025, 2024, 2023, 2022, 2021, 2020];
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     const currdate = new Date();
     const [year, setYear] = useState(currdate.getFullYear());
-    const [month, setMonth] = useState(currdate.getMonth()+1);
+    const [month, setMonth] = useState(currdate.getMonth() + 1);
 
     const compareDates = (created_at, year, month) => {
         const date = new Date(created_at);
-        if(date.getFullYear() == year && date.getMonth()+1 == month){
+        if (date.getFullYear() == year && date.getMonth() + 1 == month) {
             return true;
         }
         return false;
     }
 
     const calculateDuration = (t) => {
-        if(t.sick){
-            // return user.
-        }
 
-        let arrivalTime, beforeBreak, afterBreak, departureTime = null;
-        if(t.arrivalTime){
-            arrivalTime = new Date(t.arrivalTime);
-        }
+        let arrivalTime = t.arrivalTime ? new Date(t.arrivalTime) : null;
+        let beforeBreak = t.beforeBreak ? new Date(t.beforeBreak) : null;
+        let afterBreak = t.afterBreak ? new Date(t.afterBreak) : null;
+        let departureTime = t.departureTime ? new Date(t.departureTime) : null;
+        let currentTime = new Date();
 
+        console.log('arrivalTime', arrivalTime);
+        console.log('beforeBreak', beforeBreak);
+        console.log('afterBreak', afterBreak);
+        console.log('departureTime', departureTime);
 
 
         let s = 0;
-        if(departureTime){
-            s = (new Date(beforeBreak)) - (new Date(arrivalTime));
-        } else if(afterBreak){
+
+        if (departureTime) {
+            s = (departureTime - afterBreak) + (beforeBreak - arrivalTime);
+
+        } else if (afterBreak) {
+            s = (currentTime - afterBreak) + (beforeBreak - arrivalTime);
+
+        } else if (beforeBreak) {
+            s = beforeBreak - arrivalTime;
+
+        } else if (arrivalTime) {
+            s = currentTime - arrivalTime;
 
         }
 
-
-
-
-        if(arrivalTime && beforeBreak){
-            let s = 0;
-            s = (new Date(beforeBreak)) - (new Date(arrivalTime));
-            if(afterBreak && departureTime){
-                s += (new Date(departureTime)) - (new Date(afterBreak));
-            }
-            return s;
-        }else if(arrivalTime){
-            let s = 0;
-            const currentDate = new Date();
-            s = currentDate - (new Date(arrivalTime));
-            return 0;
-        }
+        return s;
     }
 
-     
+
+    
+    
+    
     const timesheet = useMemo(
         () => {
-            return user?.timesheet?.filter((tm)=>{return compareDates(tm.created_at, year, month)})
-        },[year, month]
+            return user?.timesheet?.filter((tm) => { return compareDates(tm.created_at, year, month) })
+        }, [year, month]
     )
+    
+    const monthlyHours = () => {
+        let s = 0;
+        timesheet?.foreach((timesheet)=>{ s += calculateDuration(timesheet) })
+        console.log('monthly hours is', s);
+    }
+    monthlyHours();
 
     console.log("timesheet", timesheet);
 
@@ -90,20 +98,20 @@ export default function Timesheet({ user }) {
                         Year
                     </label>
                     <div className="relative group">
-                        <select 
+                        <select
                             id="year"
                             className="w-full appearance-none bg-zinc-900 border border-zinc-800 text-zinc-100 text-sm rounded-lg p-3 outline-none transition-all duration-200 hover:border-zinc-600 focus:ring-2 focus:ring-zinc-700 focus:border-zinc-500 cursor-pointer"
                             onChange={(e) => setYear(e.target.value)}
-                            defaultValue= {year}
+                            defaultValue={year}
                         >
                             <option value="" disabled className="text-zinc-500">Select year</option>
                             {years.map((year, index) => (
-                            <option key={index} value={year} className="bg-zinc-900 text-zinc-100">{year}</option>
+                                <option key={index} value={year} className="bg-zinc-900 text-zinc-100">{year}</option>
                             ))}
                         </select>
 
                         <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none text-zinc-500 group-hover:text-zinc-300 transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
                         </div>
                     </div>
                 </div>
@@ -113,7 +121,7 @@ export default function Timesheet({ user }) {
                         Month
                     </label>
                     <div className="relative group">
-                        <select 
+                        <select
                             id="month"
                             className="w-full appearance-none bg-zinc-900 border border-zinc-800 text-zinc-100 text-sm rounded-lg p-3 outline-none transition-all duration-200 hover:border-zinc-600 focus:ring-2 focus:ring-zinc-700 focus:border-zinc-500 cursor-pointer"
                             onChange={(e) => setMonth(e.target.value)}
@@ -121,11 +129,11 @@ export default function Timesheet({ user }) {
                         >
                             <option value="" disabled className="text-zinc-500">Select month</option>
                             {months.map((month, index) => (
-                            <option key={index} value={index+1} className="bg-zinc-900 text-zinc-100">{month}</option>
+                                <option key={index} value={index + 1} className="bg-zinc-900 text-zinc-100">{month}</option>
                             ))}
                         </select>
                         <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none text-zinc-500 group-hover:text-zinc-300 transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
                         </div>
                     </div>
                 </div>
@@ -170,17 +178,19 @@ export default function Timesheet({ user }) {
                                 <th className="px-6 py-5 font-black text-zinc-500 uppercase tracking-widest text-[10px]">Break Start</th>
                                 <th className="px-6 py-5 font-black text-zinc-500 uppercase tracking-widest text-[10px]">Break End</th>
                                 <th className="px-6 py-5 font-black text-zinc-500 uppercase tracking-widest text-[10px]">Departure</th>
+                                <th className="px-6 py-5 font-black text-zinc-500 uppercase tracking-widest text-[10px]">Duration</th>
                                 <th className="px-6 py-5 font-black text-zinc-500 uppercase tracking-widest text-[10px]">Status</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-zinc-800/50">
                             {timesheet?.map((timesheet, index) => {
                                 return <tr key={index} className="hover:bg-zinc-800/30 transition-colors group">
-                                    <td className="px-6 py-4 font-medium text-zinc-200">Nov 23, 2026</td>
+                                    <td className="px-6 py-4 font-medium text-zinc-200">{ dateFormat(timesheet.created_at) }</td>
                                     <td className="px-6 py-4 text-zinc-400 group-hover:text-zinc-200">{timeFormat(timesheet?.arrivalTime) || "-"}</td>
-                                    <td className="px-6 py-4 text-zinc-500">{timeFormat(timesheet?.beforeBreak) || "-"}</td>
-                                    <td className="px-6 py-4 text-zinc-500">{timeFormat(timesheet?.afterBreak) || "-"}</td>
+                                    <td className="px-6 py-4 text-zinc-500 group-hover:text-zinc-200">{timeFormat(timesheet?.beforeBreak) || "-"}</td>
+                                    <td className="px-6 py-4 text-zinc-500 group-hover:text-zinc-200">{timeFormat(timesheet?.afterBreak) || "-"}</td>
                                     <td className="px-6 py-4 text-zinc-400 group-hover:text-zinc-200">{timeFormat(timesheet?.departureTime) || "-"}</td>
+                                    <td className="px-6 py-4 text-zinc-400 group-hover:text-zinc-200">{secondsToHours(calculateDuration(timesheet)) || 'hh'}</td>
                                     <td className="px-6 py-4 text-right">
                                         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
                                             <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse"></div>
@@ -194,19 +204,19 @@ export default function Timesheet({ user }) {
                     </table>
                 </div>
 
-                :<div className="flex flex-col items-center justify-center p-12 rounded-xl border-2 border-dashed border-zinc-700 bg-zinc-900/50 text-zinc-400">
-                    <div className="mb-4 text-zinc-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-8">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
-                        </svg>
+                    : <div className="flex flex-col items-center justify-center p-12 rounded-xl border-2 border-dashed border-zinc-700 bg-zinc-900/50 text-zinc-400">
+                        <div className="mb-4 text-zinc-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-8">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+                            </svg>
 
+                        </div>
+
+                        <h3 className="text-lg font-semibold text-zinc-200">No scans found</h3>
+                        <p className="text-sm text-zinc-500 mt-1 text-center max-w-[250px]">
+                            We couldn't find any scans for the selected period. Try adjusting your filters.
+                        </p>
                     </div>
-
-                    <h3 className="text-lg font-semibold text-zinc-200">No scans found</h3>
-                    <p className="text-sm text-zinc-500 mt-1 text-center max-w-[250px]">
-                        We couldn't find any scans for the selected period. Try adjusting your filters.
-                    </p>
-                </div>
 
             }
 
