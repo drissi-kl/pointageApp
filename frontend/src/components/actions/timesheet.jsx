@@ -69,10 +69,9 @@ export default function Timesheet({ user }) {
     
     const monthlyHours = () => {
         let s = 0;
-        timesheet?.foreach((timesheet)=>{ s += calculateDuration(timesheet) })
-        console.log('monthly hours is', s);
+        timesheet?.forEach((timesheet)=>{ s += calculateDuration(timesheet) })
+        return secondsToHours(s);
     }
-    monthlyHours();
 
     console.log("timesheet", timesheet);
 
@@ -155,11 +154,11 @@ export default function Timesheet({ user }) {
                 <div className="flex gap-4">
                     <div className="text-[11px] text-zinc-500 flex items-center gap-2">
                         <Clock size={14} />
-                        Total Hours: <span className="text-zinc-300 font-bold">164h</span>
+                        Total Hours: <span className="text-zinc-300 font-bold">{ monthlyHours() }</span>
                     </div>
                     <div className="text-[11px] text-zinc-500 flex items-center gap-2">
                         <CalendarDays size={14} />
-                        Days Worked: <span className="text-zinc-300 font-bold">21 Days</span>
+                        Days Worked: <span className="text-zinc-300 font-bold">{timesheet?.length || 0} Days</span>
                     </div>
                 </div>
                 <button className="text-[11px] font-bold text-zinc-400 hover:text-zinc-100 transition-colors">
@@ -192,9 +191,24 @@ export default function Timesheet({ user }) {
                                     <td className="px-6 py-4 text-zinc-400 group-hover:text-zinc-200">{timeFormat(timesheet?.departureTime) || "-"}</td>
                                     <td className="px-6 py-4 text-zinc-400 group-hover:text-zinc-200">{secondsToHours(calculateDuration(timesheet)) || 'hh'}</td>
                                     <td className="px-6 py-4 text-right">
-                                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
-                                            <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse"></div>
-                                            Present
+                                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold border 
+                                                ${timesheet.late ? "bg-yellow-500/10 text-yellow-500  border-yellow-500/20"
+                                                    :timesheet.sick ? "bg-amber-500/10 text-amber-500  border-amber-500/20"
+                                                    :timesheet.holiday ? "bg-blue-500/10 text-blue-500  border-blue-500/20"
+                                                    :'bg-emerald-500/10 text-emerald-500  border-emerald-500/20'}
+                                            `}>
+                                            <div className={`w-1 h-1 rounded-full animate-pulse ${
+                                                    timesheet.late ? "bg-yellow-500"
+                                                    :timesheet.sick ? "bg-amber-500"
+                                                    :timesheet.holiday ? "bg-blue-500"
+                                                    :'bg-emerald-500'
+                                                }`}></div>
+                                            {
+                                                timesheet.late ? "Late"
+                                                :timesheet.sick ? "Sick"
+                                                :timesheet.holiday ? "Holiday"
+                                                :"Present"
+                                            }
                                         </span>
                                     </td>
                                 </tr>
