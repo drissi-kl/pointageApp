@@ -10,34 +10,19 @@ use Illuminate\Http\Request;
 
 class ExceptionalTimeController extends Controller
 {
-    public function index(){
-        try{
-            $expTimes = ExceptionalTime::all();
-            return response()->json([
-                'status' => 'success',
-                "allExceptionalTime" => $expTimes
-            ]);
-        }catch(Exception $e){
-            return response()->json([
-                'status' => 'error',
-                "message" => $e->getMessage()
-            ]);
-        }
-    }
-
 
     // store function for create new exceptional time for user 
     public function store(Request $request){
         try{
             $formFields = $request->validate([
-                'dayName' => "required|in:Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday",
+                "dayName" => "required|in:Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday",
                 "arrivalTime" => "required|date_format:H:i",
                 "user_id" => "required"
             ]);
 
             $excTime = ExceptionalTime::where('user_id', $formFields['user_id'])
                 ->where('dayName', $formFields['dayName'])
-                ->get();
+                ->first();
 
             if($excTime){
                 return response()->json([

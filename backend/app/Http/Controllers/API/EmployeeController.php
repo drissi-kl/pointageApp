@@ -18,6 +18,7 @@ class EmployeeController extends Controller
                     ->with('employee')
                     ->with('timesheet')
                     ->with('post')
+                    ->with('exceptionalTimes')
                     ->get();
             
             

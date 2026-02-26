@@ -13,4 +13,9 @@ class ExceptionalTime extends Model
 
     protected $fillable = [ "dayName", "arrivalTime", "user_id"];
 
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
 }

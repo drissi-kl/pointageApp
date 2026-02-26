@@ -62,4 +62,8 @@ class User extends Authenticatable
     public function post(){
         return $this->belongsTo(Post::class);
     }
+
+    public function exceptionalTimes(){
+        return $this->hasMany(ExceptionalTime::class);
+    }
 }
