@@ -17,9 +17,12 @@ class EmployeeController extends Controller
             $employees = User::where('role', 'employee')
                     ->with('employee')
                     ->with('timesheet')
-                    ->with('post')
                     ->with('exceptionalTimes')
                     ->get();
+            
+            foreach($employees as $employee){
+                $employee->employee->load('post');
+            }
             
             
             return response()->json([

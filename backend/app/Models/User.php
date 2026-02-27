@@ -59,9 +59,7 @@ class User extends Authenticatable
         return $this->hasMany(TimeSheet::class);
     }
 
-    public function post(){
-        return $this->belongsTo(Post::class);
-    }
+
 
     public function exceptionalTimes(){
         return $this->hasMany(ExceptionalTime::class);

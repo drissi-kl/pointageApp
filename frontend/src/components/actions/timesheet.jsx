@@ -58,18 +58,38 @@ export default function Timesheet({ user }) {
     }
 
 
-    
-    
-    
+
+
+
     const timesheet = useMemo(
         () => {
             return user?.timesheet?.filter((tm) => { return compareDates(tm.created_at, year, month) })
         }, [year, month]
     )
-    
+
     const monthlyHours = () => {
         let s = 0;
-        timesheet?.forEach((timesheet)=>{ s += calculateDuration(timesheet) })
+        let dailyHours = user.employee.post.dailyHours.match(/^[0-9]{2}:[0-9]{2}/g)[0];
+
+        const [hours, minutes] = dailyHours.split(':');
+
+        dailyHours = Number(hours) * 60 * 60 * 1000;
+        dailyHours += Number(minutes) * 60 * 1000;
+
+        timesheet?.forEach((timesheet) => {
+            if (timesheet.sick || timesheet.holiday) {
+                s += dailyHours;
+
+            } else if (timesheet.absent) {
+                s += 0;
+
+            } else {
+                s += calculateDuration(timesheet);
+
+            }
+
+        });
+
         return secondsToHours(s);
     }
 
@@ -154,7 +174,7 @@ export default function Timesheet({ user }) {
                 <div className="flex gap-4">
                     <div className="text-[11px] text-zinc-500 flex items-center gap-2">
                         <Clock size={14} />
-                        Total Hours: <span className="text-zinc-300 font-bold">{ monthlyHours() }</span>
+                        Total Hours: <span className="text-zinc-300 font-bold">{monthlyHours()}</span>
                     </div>
                     <div className="text-[11px] text-zinc-500 flex items-center gap-2">
                         <CalendarDays size={14} />
@@ -184,7 +204,7 @@ export default function Timesheet({ user }) {
                         <tbody className="divide-y divide-zinc-800/50">
                             {timesheet?.map((timesheet, index) => {
                                 return <tr key={index} className="hover:bg-zinc-800/30 transition-colors group">
-                                    <td className="px-6 py-4 font-medium text-zinc-200">{ dateFormat(timesheet.created_at) }</td>
+                                    <td className="px-6 py-4 font-medium text-zinc-200">{dateFormat(timesheet.created_at)}</td>
                                     <td className="px-6 py-4 text-zinc-400 group-hover:text-zinc-200">{timeFormat(timesheet?.arrivalTime) || "-"}</td>
                                     <td className="px-6 py-4 text-zinc-500 group-hover:text-zinc-200">{timeFormat(timesheet?.beforeBreak) || "-"}</td>
                                     <td className="px-6 py-4 text-zinc-500 group-hover:text-zinc-200">{timeFormat(timesheet?.afterBreak) || "-"}</td>
@@ -193,21 +213,20 @@ export default function Timesheet({ user }) {
                                     <td className="px-6 py-4 text-right">
                                         <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold border 
                                                 ${timesheet.late ? "bg-yellow-500/10 text-yellow-500  border-yellow-500/20"
-                                                    :timesheet.sick ? "bg-amber-500/10 text-amber-500  border-amber-500/20"
-                                                    :timesheet.holiday ? "bg-blue-500/10 text-blue-500  border-blue-500/20"
-                                                    :'bg-emerald-500/10 text-emerald-500  border-emerald-500/20'}
+                                                : timesheet.sick ? "bg-amber-500/10 text-amber-500  border-amber-500/20"
+                                                    : timesheet.holiday ? "bg-blue-500/10 text-blue-500  border-blue-500/20"
+                                                        : 'bg-emerald-500/10 text-emerald-500  border-emerald-500/20'}
                                             `}>
-                                            <div className={`w-1 h-1 rounded-full animate-pulse ${
-                                                    timesheet.late ? "bg-yellow-500"
-                                                    :timesheet.sick ? "bg-amber-500"
-                                                    :timesheet.holiday ? "bg-blue-500"
-                                                    :'bg-emerald-500'
+                                            <div className={`w-1 h-1 rounded-full animate-pulse ${timesheet.late ? "bg-yellow-500"
+                                                    : timesheet.sick ? "bg-amber-500"
+                                                        : timesheet.holiday ? "bg-blue-500"
+                                                            : 'bg-emerald-500'
                                                 }`}></div>
                                             {
                                                 timesheet.late ? "Late"
-                                                :timesheet.sick ? "Sick"
-                                                :timesheet.holiday ? "Holiday"
-                                                :"Present"
+                                                    : timesheet.sick ? "Sick"
+                                                        : timesheet.holiday ? "Holiday"
+                                                            : "Present"
                                             }
                                         </span>
                                     </td>

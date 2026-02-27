@@ -12,8 +12,8 @@ class Post extends Model
     protected $table = "posts";
     protected $fillable = ['name', 'arrivalTime', 'dailyHours'];
 
-    public function users(){
-        return $this->hasMany(User::class);
+    public function employees(){
+        return $this->hasMany(Employee::class);
     }
     
 }
