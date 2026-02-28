@@ -11,6 +11,17 @@ use Illuminate\Http\Request;
 class ExceptionalTimeController extends Controller
 {
 
+    public function index($user_id){
+        $expTimes = ExceptionalTime::where('user_id', $user_id)->get();
+
+
+        return response()->json([
+            "status" => "success",
+            "exceptionalTime" => $expTimes
+        ]); 
+
+    }
+
     // store function for create new exceptional time for user 
     public function store(Request $request){
         try{
@@ -88,7 +99,6 @@ class ExceptionalTimeController extends Controller
             ]);
         }
     }
-
 
 
     // destroy function for delete an exceptional time for user 

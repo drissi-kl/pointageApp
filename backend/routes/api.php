@@ -56,6 +56,7 @@ Route::middleware(['auth:sanctum', 'isSuperAdminOrAdmin'])->controller(PostContr
 
 // ## start exceptional time
 Route::middleware(['auth:sanctum'])->controller(ExceptionalTimeController::class)->group(function(){
+    Route::get("/exceptionalTimes/{user_id}", "index");
     Route::post("/exceptionalTimes", "store");
     Route::put("/exceptionalTimes/{id}", "update");
     Route::delete("/exceptionalTimes/{id}", 'destroy');

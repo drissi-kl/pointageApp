@@ -1,25 +1,52 @@
 import React from 'react';
 import { ArrowLeft, Save } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createExceptionTimeApi } from '@/services/exceptionalTimeService';
 
 export default function AddExceptionalTime({ user, showExceptionalTime }) {
     const dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+    const queryClient = useQueryClient();
 
-    const {register, handleSubmit } = useForm();
+    const { register, handleSubmit } = useForm();
 
     const addExceptionalTimeMutation = useMutation({
         mutationFn: (e) => createExceptionTimeApi(e),
         onSuccess: (data, variable, context) => {
+            if (data.status == 'success') {
+                queryClient.setQueryData(['employees'], (oldData) => {
+                    console.log('old data', oldData);
+
+                    const newDate = oldData.employees.map((emp) => {
+                        if (emp.id == user.id) {
+
+                            
+                            emp.exceptional_times = [...emp.exceptional_times, data.exceptionalTime];
+                            console.log("employee selected", emp);
+                            return emp;
+
+                        }else{
+                            return emp;
+
+                        }
+                    })
+
+                    console.log('new data', newDate);
+
+                    return { ...oldData, employees: newDate };
+
+                });
+
+                showExceptionalTime();
+                
+            }
             console.log('data', data);
         }
     })
 
-    const addExceptionalTimeForm = (e) =>{
+    const addExceptionalTimeForm = (e) => {
         e.user_id = user.id;
         addExceptionalTimeMutation.mutate(e);
-        showExceptionalTime();
     }
 
     return (
@@ -50,7 +77,7 @@ export default function AddExceptionalTime({ user, showExceptionalTime }) {
                                     className="w-full bg-zinc-900/50 border border-zinc-800 text-zinc-200 py-4 px-5 pr-12 rounded-2xl outline-none focus:ring-1 focus:ring-zinc-500 focus:border-zinc-500 transition-all appearance-none cursor-pointer text-sm group-hover:bg-zinc-800/50"
                                 >
                                     <option value="null" className="bg-zinc-950">Choose a day...</option>
-                                    {dayNames.map((day, index) => { return <option key={index} value={day} className="bg-zinc-950">{day}</option> } )}
+                                    {dayNames.map((day, index) => { return <option key={index} value={day} className="bg-zinc-950">{day}</option> })}
                                 </select>
                                 <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-zinc-600">
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
