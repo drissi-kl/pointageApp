@@ -30,5 +30,17 @@ const createExceptionTimeApi = async (body) => {
 }
 
 
+const deleteExceptionTimeApi = async (id) => {
+    try {
+        const response = await baseApi.delete(`/exceptionalTimes/${id}`);
+        return response.data;
 
-export { createExceptionTimeApi, getAllExceptionTimeApi };
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            throw error;
+        }
+        throw new Error('exist error in deleteExceptionTimeApi function');
+    }
+}
+
+export { createExceptionTimeApi, getAllExceptionTimeApi, deleteExceptionTimeApi, };
