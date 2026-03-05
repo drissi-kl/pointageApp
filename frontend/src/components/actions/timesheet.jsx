@@ -1,6 +1,7 @@
 import dateFormat from '@/utilities/dateFormat';
 import secondsToHours from '@/utilities/secondsToHours';
 import timeFormat from '@/utilities/timeFormat';
+import toMiSecondes from '@/utilities/toMiSecondes';
 import { Sheet, CalendarDays, Clock } from 'lucide-react'
 import React, { useMemo, useState } from 'react'
 
@@ -52,6 +53,12 @@ export default function Timesheet({ user }) {
         } else if (arrivalTime) {
             s = currentTime - arrivalTime;
 
+            if(s > toMiSecondes(user.employee.post.dailyHours)){
+                s = toMiSecondes(user.employee.post.dailyHours);
+            }
+
+        } else if( t.sick || t.holiday) {
+            s = toMiSecondes(user.employee.post.dailyHours);
         }
 
         return s;
