@@ -16,11 +16,13 @@ class PostSeeder extends Seeder
         $posts = [
             [
                 'name' => 'developer',
-                'arrivalTime' => '09:00'
+                'arrivalTime' => '09:00',
+                'dailyHours' => '08:00'
             ],
             [
                 'name' => 'UI/UX',
-                'arrivalTime' => '08:00'
+                'arrivalTime' => '08:00',
+                'dailyHours' => '16:00'
             ]
         ];
         foreach($posts as $post){

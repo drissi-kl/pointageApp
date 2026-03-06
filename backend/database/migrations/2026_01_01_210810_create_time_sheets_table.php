@@ -18,8 +18,6 @@ return new class extends Migration
             $table->datetime('afterBreak')->nullable();
             $table->datetime('departureTime')->nullable();
             $table->boolean('late')->default(false);
-            $table->boolean('sick')->default(false);
-            $table->boolean('holiday')->default(false);
             $table->foreignId('user_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
