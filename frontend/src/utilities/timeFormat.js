@@ -1,11 +1,12 @@
 const timeFormat = (t) => {
-    if(/[0-9]{2}:[0-9]{2}:[0-9]{2}/.test(t)){
-        let tm = t.match(/[0-9]{2}:[0-9]{2}:[0-9]{2}/g);
+    const pat = /^[0-9]{2}:[0-9]{2}/g;
+    if(pat.test(t)){
+        let tm = t.match(pat);
         if(tm.length > 0){
             tm = tm[0];
+            return tm;
         }
-        const hm = tm?.split(':')?.slice(0,2)?.join(':')
-        return hm;
+        return false;
     }else{
         return false;
     }
