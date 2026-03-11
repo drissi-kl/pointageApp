@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Search, Mail, Phone, MoreVertical, UserPlus, ShieldCheck } from 'lucide-react';
 import Actions from '../actions/actions';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -7,22 +7,28 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 export default function ShowEmployees({ addEmployee }) {
     const [searchEmployee, setSearchEmployee] = useState('');
 
+    const [selectedEmployee, setSelectedEmployee] = useState(null)
     const queryClient = useQueryClient();
 
     // retriev admin from cache not server
-    const employees = queryClient.getQueryData(['employees']);
+    let employees = queryClient.getQueryData(['employees']);
+    useEffect(()=>{
+        employees = queryClient.getQueryData(['employees']);
+        console.log("use effect done");
+        console.log("employees", employees);
+        
+    },[selectedEmployee])
 
     // for filter admins by name or email
     const filteredEmpolyees = useMemo(
         () => {
             return employees?.employees?.filter(employee =>
-                employee.name.toLowerCase().includes(searchEmployee.toLowerCase()) || employee.email.toLowerCase().includes(searchEmployee.toLowerCase())
+                employee?.name?.toLowerCase()?.includes(searchEmployee?.toLowerCase()) || employee?.email?.toLowerCase()?.includes(searchEmployee?.toLowerCase())
             );
-        }, [searchEmployee]
+        }, [searchEmployee, employees]
     )
 
 
-    const [selectedEmployee, setSelectedEmployee] = useState(null)
 
 
     return (

@@ -115,10 +115,6 @@ export default function ShowPosts({addPost, postSelected, deletePost }) {
                 </div>
                 )}
             </div>
-
-            {
-                // selectedPost && <Actions admin={selectedAdmin} closeActions={()=>setSelectedAdmin(null)} />
-            }
         </main>
     )
 }

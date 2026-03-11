@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
-import { Sheet, UserRoundX, AlarmClockCheck, CalendarCheck, X, ChevronRight, ScanQrCode  } from 'lucide-react'
+import { Sheet, UserRoundX, AlarmClockCheck, X, ChevronRight, ScanQrCode  } from 'lucide-react'
 
 import Timesheet from './timesheet';
 import ExceptionalTime from './exceptionalTime';
-import Holiday from './holiday';
 import DeleteUser from './deleteUser';
 import Qrcode from './qrcode';
 
@@ -12,12 +11,10 @@ export default function Actions({user, closeActions}) {
 
     return (
         <div className="fixed inset-0 z-50 flex justify-center items-center bg-zinc-950/80 backdrop-blur-md p-4 md:p-10">
-            {/* الحاوية الرئيسية - Main Wrapper */}
+
             <div className="flex h-full w-full max-w-6xl overflow-hidden rounded-[2rem] bg-zinc-950 shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)] border border-zinc-800/50">
                 
-                {/* القائمة الجانبية - Sidebar */}
                 <aside className="flex flex-col border-r border-zinc-800/50 p-8 lg:basis-[25%] md:basis-[35%] bg-zinc-900/20">
-                    {/* معلومات المستخدم السريعة في الهيدر */}
                     <div className="mb-10 px-2">
                         <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 mb-1">Management</h2>
                         <h3 className="text-zinc-100 font-bold text-lg">Control Panel</h3>
@@ -27,7 +24,6 @@ export default function Actions({user, closeActions}) {
                         {[
                             { id: 'timesheet', name: 'Timesheet', icon: Sheet },
                             { id: 'exceptionaltime', name: 'Exceptional Time', icon: AlarmClockCheck },
-                            { id: 'holiday', name: 'Holiday', icon: CalendarCheck },
                             { id: 'qrcode', name: 'Qr Code', icon: ScanQrCode },
                         ].map((item) => (
                             <button 
@@ -49,7 +45,6 @@ export default function Actions({user, closeActions}) {
 
                         <div className="my-6 border-t border-zinc-800/50"></div>
 
-                        {/* أزرار الإجراءات الخاصة */}
                         <button 
                             onClick={() => setAction('delete')} 
                             className={`flex items-center gap-3 rounded-2xl px-4 py-3.5 text-sm font-medium transition-all ${
