@@ -2,8 +2,12 @@ import { getAllAdminsApi } from '@/services/adminService';
 import { getAllEmployeesApi } from '@/services/employeeService';
 import { getAllPostsApi } from '@/services/postService';
 import { changePage } from '@/store/slicePage';
+import checkIfToday from '@/utilities/checkIfToday';
+import secondsToHours from '@/utilities/secondsToHours';
+import toMiSecondes from '@/utilities/toMiSecondes';
+import { current } from '@reduxjs/toolkit';
 import { useQuery } from '@tanstack/react-query';
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useDispatch } from 'react-redux';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
@@ -43,6 +47,66 @@ export default function HomeSuperAdmin() {
 
 
 
+  const calculateDuration = (t, user) => {
+
+    let arrivalTime = t.arrivalTime ? new Date(t.arrivalTime) : null;
+    let beforeBreak = t.beforeBreak ? new Date(t.beforeBreak) : null;
+    let afterBreak = t.afterBreak ? new Date(t.afterBreak) : null;
+    let departureTime = t.departureTime ? new Date(t.departureTime) : null;
+    let currentTime = new Date();
+
+    console.log('arrivalTime', arrivalTime);
+    console.log('beforeBreak', beforeBreak);
+    console.log('afterBreak', afterBreak);
+    console.log('departureTime', departureTime);
+
+
+    let s = 0;
+
+    if (departureTime) {
+        s = (departureTime - afterBreak) + (beforeBreak - arrivalTime);
+
+    } else if (afterBreak) {
+        s = (currentTime - afterBreak) + (beforeBreak - arrivalTime);
+
+    } else if (beforeBreak) {
+        s = beforeBreak - arrivalTime;
+
+    } else if (arrivalTime) {
+        s = currentTime - arrivalTime;
+
+        if(s > toMiSecondes(user.employee.post.dailyHours)){
+            s = toMiSecondes(user.employee.post.dailyHours);
+        }
+
+    } else if( t.sick || t.holiday) {
+        s = toMiSecondes(user.employee.post.dailyHours);
+    }
+
+    return s;
+  }
+
+
+
+  const currentScans = useMemo(
+    ()=>{
+      const curScans = [];
+      employees?.employees?.forEach((employee)=>{        
+        employee?.timesheet?.forEach((ts)=>{
+          if(checkIfToday(ts.created_at)){
+            curScans.push({name: employee.name, hours:String(calculateDuration(ts, employee)/(1000*60*60)).slice(0,3), duration: secondsToHours(calculateDuration(ts, employee)), late: ts.late});
+          }
+        })
+      })
+      
+      return curScans;
+    }, [employees]
+  )
+
+  const laters = currentScans.filter((item)=> item.late)
+
+  console.log("scansToday", currentScans);
+  
   // console.log('home super admin user', user)
 
   if(employeesLoading){
@@ -89,13 +153,12 @@ export default function HomeSuperAdmin() {
       <div className="flex items-center justify-between mb-4">
         <div className="p-2 bg-green-50 dark:bg-green-900/30 rounded-lg text-green-600 dark:text-green-400">
           <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 2l3 2 3-2v3H9V2z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
       </div>
       <div>
-        <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Admins</p>
+        <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Complete Scans</p>
         <h3 className="text-2xl font-bold text-zinc-800 dark:text-white"> { 0} </h3>
       </div>
     </div>
@@ -110,7 +173,7 @@ export default function HomeSuperAdmin() {
       </div>
       <div>
         <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Active Scans</p>
-        <h3 className="text-2xl font-bold text-zinc-800 dark:text-white">43</h3>
+        <h3 className="text-2xl font-bold text-zinc-800 dark:text-white">{ current.length }</h3>
       </div>
     </div>
 
@@ -124,7 +187,7 @@ export default function HomeSuperAdmin() {
       </div>
       <div>
         <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Latecomers</p>
-        <h3 className="text-2xl font-bold text-zinc-800 dark:text-white">12</h3>
+        <h3 className="text-2xl font-bold text-zinc-800 dark:text-white">{laters.length}</h3>
       </div>
     </div>
 
@@ -137,8 +200,8 @@ export default function HomeSuperAdmin() {
         </div>
         
         <div className="h-80 w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+          <ResponsiveContainer width="100%" height="100%" >
+            <BarChart data={currentScans} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
               <XAxis 
                 dataKey="name" 
@@ -151,8 +214,10 @@ export default function HomeSuperAdmin() {
                 axisLine={false} 
                 tickLine={false} 
                 tick={{ fill: '#94a3b8', fontSize: 12 }}
+                
               />
               <Tooltip 
+                formatter={(value, name, props)=> [`${props.payload.duration}`]}
                 cursor={{ fill: 'white', opacity: 0.1 }}
                 contentStyle={{ borderRadius: '8px', border: 'none', background: "white", boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.8)' }}
               />
@@ -161,6 +226,7 @@ export default function HomeSuperAdmin() {
                 fill="#3b82f6" 
                 radius={[6, 6, 0, 0]} 
                 barSize={40}
+                
               >
                 {data.map((entry, index) => (
                     <Cell key={`cell-${index}`} className="hover:opacity-80 transition-opacity duration-300" />
