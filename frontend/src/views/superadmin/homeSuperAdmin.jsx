@@ -13,22 +13,6 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 
 
 export default function HomeSuperAdmin() {
-  const data = [
-    { name: 'Alex R.', hours: 8.5 },
-    { name: 'Jordan S.', hours: 7.2 },
-    { name: 'Mila K.', hours: 9.0 },
-    { name: 'Robert P.', hours: 6.8 },
-    { name: 'Sarah W.', hours: 8.0 },
-    { name: 'Chen L.', hours: 7.5 },
-    { name: 'Elena G.', hours: 5.5 },
-    { name: 'Alex R.', hours: 8.5 },
-    { name: 'Jordan S.', hours: 7.2 },
-    { name: 'Mila K.', hours: 9.0 },
-    { name: 'Robert P.', hours: 6.8 },
-    { name: 'Sarah W.', hours: 8.0 },
-    { name: 'Chen L.', hours: 7.5 },
-    { name: 'Elena G.', hours: 5.5 },
-  ];
 
   const dispatch = useDispatch();
 
@@ -47,7 +31,7 @@ export default function HomeSuperAdmin() {
 
 
 
-  const calculateDuration = (t, user) => {
+  const calculateDuration = (t, user=null) => {
 
     let arrivalTime = t.arrivalTime ? new Date(t.arrivalTime) : null;
     let beforeBreak = t.beforeBreak ? new Date(t.beforeBreak) : null;
@@ -173,7 +157,7 @@ export default function HomeSuperAdmin() {
       </div>
       <div>
         <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Active Scans</p>
-        <h3 className="text-2xl font-bold text-zinc-800 dark:text-white">{ current.length }</h3>
+        <h3 className="text-2xl font-bold text-zinc-800 dark:text-white">{ currentScans.length || 0 }</h3>
       </div>
     </div>
 
@@ -187,7 +171,7 @@ export default function HomeSuperAdmin() {
       </div>
       <div>
         <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Latecomers</p>
-        <h3 className="text-2xl font-bold text-zinc-800 dark:text-white">{laters.length}</h3>
+        <h3 className="text-2xl font-bold text-zinc-800 dark:text-white">{laters.length || 0}</h3>
       </div>
     </div>
 
@@ -228,7 +212,7 @@ export default function HomeSuperAdmin() {
                 barSize={40}
                 
               >
-                {data.map((entry, index) => (
+                {currentScans.map((entry, index) => (
                     <Cell key={`cell-${index}`} className="hover:opacity-80 transition-opacity duration-300" />
                 ))}
               </Bar>
