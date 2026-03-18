@@ -133,7 +133,7 @@ export default function HomeSuperAdmin() {
       
     </div>
 
-    <div onClick={()=>dispatch(changePage('admins'))} className="p-6 bg-white dark:bg-zinc-800 rounded-2xl border border-zinc-100 dark:border-zinc-700 shadow-sm cursor-pointer hover:shadow-[0px_0px_10px_1px] hover:shadow-green-400 transition-all duration-300">
+    <div className="p-6 bg-white dark:bg-zinc-800 rounded-2xl border border-zinc-100 dark:border-zinc-700 shadow-sm cursor-pointer hover:shadow-[0px_0px_10px_1px] hover:shadow-green-400 transition-all duration-300">
       <div className="flex items-center justify-between mb-4">
         <div className="p-2 bg-green-50 dark:bg-green-900/30 rounded-lg text-green-600 dark:text-green-400">
           <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
