@@ -17,14 +17,14 @@ class TimesheetContoller extends Controller
      */
     public function index()
     {
-        try{
+        try {
             $timesheet = TimeSheet::all();
             return response()->json([
                 'status' => 'success',
                 'data' => $timesheet
             ]);
 
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage()
@@ -37,7 +37,7 @@ class TimesheetContoller extends Controller
      */
     public function store(Request $request)
     {
-        try{
+        try {
             $empInfo = $request->validate([
                 'name' => 'required|string',
                 'email' => 'required|string',
@@ -45,20 +45,34 @@ class TimesheetContoller extends Controller
             ]);
 
             $user = User::where('name', $empInfo['name'])
-                    ->where('email', $empInfo['email'])
-                    ->where('created_at', $empInfo['created_at'])
-                    ->first();
-
-
-            if($user){
-                $timesheet = TimeSheet::where('user_id', $user->id)
-                ->whereDate('created_at', now()->format('Y-m-d'))
+                ->where('email', $empInfo['email'])
+                ->where('created_at', $empInfo['created_at'])
                 ->first();
-                if(!$timesheet){
-                    $newTimeSheet = TimeSheet::create([
+
+
+            if ($user) {
+                $timesheet = TimeSheet::where('user_id', $user->id)
+                    ->whereDate('created_at', now()->format('Y-m-d'))
+                    ->first();
+                if (!$timesheet) {
+                    $user->load('employee.post');
+                    $post = $user->employee->post;
+
+                    $arrivalTimePost = Carbon::parse($post->arrivalTime);
+
+                    $diffByMinutes = now()->diffInMinutes($arrivalTimePost, false);
+
+                    $timesheetData = [
                         'user_id' => $user->id,
                         'arrivalTime' => now()
-                    ]);
+                    ];
+
+                    if($diffByMinutes < -15){
+                        $timesheetData['late'] = true;
+                    }
+                    
+
+                    $newTimeSheet = TimeSheet::create($timesheetData);
 
                     return response()->json([
                         'status' => 'success',
@@ -66,7 +80,7 @@ class TimesheetContoller extends Controller
                         'scanner' => $newTimeSheet
                     ]);
 
-                }else if(!$timesheet->beforeBreak){
+                } else if (!$timesheet->beforeBreak) {
                     $timesheet->beforeBreak = now();
                     $timesheet->save();
                     return response()->json([
@@ -75,7 +89,7 @@ class TimesheetContoller extends Controller
                         'scanner' => $timesheet
                     ]);
 
-                }else if(!$timesheet->afterBreak){
+                } else if (!$timesheet->afterBreak) {
                     $timesheet->afterBreak = now();
                     $timesheet->save();
                     return response()->json([
@@ -84,7 +98,7 @@ class TimesheetContoller extends Controller
                         'scanner' => $timesheet
                     ]);
 
-                }else if(!$timesheet->departureTime){
+                } else if (!$timesheet->departureTime) {
                     $timesheet->departureTime = now();
                     $timesheet->save();
                     return response()->json([
@@ -93,7 +107,7 @@ class TimesheetContoller extends Controller
                         'scanner' => $timesheet
                     ]);
 
-                }else{
+                } else {
                     return response()->json([
                         'status' => 'fail',
                         'message' => 'this scann not allowed, max scann is 4'
@@ -101,14 +115,14 @@ class TimesheetContoller extends Controller
                 }
 
 
-            }else{
+            } else {
                 return response()->json([
                     "status" => "fail",
                     "message" => "your information not correct"
                 ]);
             }
 
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return response()->json([
                 "status" => "error",
                 "message" => $e->getMessage()

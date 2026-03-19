@@ -11,6 +11,7 @@ import React, { useMemo } from 'react'
 import { useDispatch } from 'react-redux';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
+import calculateDuration from '@/utilities/calculateDuration';
 
 export default function HomeSuperAdmin() {
 
@@ -20,7 +21,7 @@ export default function HomeSuperAdmin() {
   // retriev employees
   const {data: employees, isLoading: employeesLoading }=useQuery({
     queryKey: ['employees'],
-    queryFn: getAllEmployeesApi
+    queryFn: getAllEmployeesApi,
   })
 
   // retriev posts
@@ -31,54 +32,21 @@ export default function HomeSuperAdmin() {
 
 
 
-  const calculateDuration = (t, user=null) => {
-
-    let arrivalTime = t.arrivalTime ? new Date(t.arrivalTime) : null;
-    let beforeBreak = t.beforeBreak ? new Date(t.beforeBreak) : null;
-    let afterBreak = t.afterBreak ? new Date(t.afterBreak) : null;
-    let departureTime = t.departureTime ? new Date(t.departureTime) : null;
-    let currentTime = new Date();
-
-    console.log('arrivalTime', arrivalTime);
-    console.log('beforeBreak', beforeBreak);
-    console.log('afterBreak', afterBreak);
-    console.log('departureTime', departureTime);
-
-
-    let s = 0;
-
-    if (departureTime) {
-        s = (departureTime - afterBreak) + (beforeBreak - arrivalTime);
-
-    } else if (afterBreak) {
-        s = (currentTime - afterBreak) + (beforeBreak - arrivalTime);
-
-    } else if (beforeBreak) {
-        s = beforeBreak - arrivalTime;
-
-    } else if (arrivalTime) {
-        s = currentTime - arrivalTime;
-
-        if(s > toMiSecondes(user.employee.post.dailyHours)){
-            s = toMiSecondes(user.employee.post.dailyHours);
-        }
-
-    } else if( t.sick || t.holiday) {
-        s = toMiSecondes(user.employee.post.dailyHours);
-    }
-
-    return s;
-  }
-
-
 
   const currentScans = useMemo(
     ()=>{
       const curScans = [];
       employees?.employees?.forEach((employee)=>{        
         employee?.timesheet?.forEach((ts)=>{
+          let data = {};
           if(checkIfToday(ts.created_at)){
-            curScans.push({name: employee.name, hours:String(calculateDuration(ts, employee)/(1000*60*60)).slice(0,3), duration: secondsToHours(calculateDuration(ts, employee)), late: ts.late});
+            data = {name: employee.name, hours:String(calculateDuration(ts, employee)/(1000*60*60)).slice(0,3), duration: secondsToHours(calculateDuration(ts, employee)), late: ts.late, complate: false};
+
+            if(ts.arrivalTime && ts.beforeBreak && ts.afterBreak && ts.departureTime){
+              data.complate = true;
+            }
+
+            curScans.push(data);
           }
         })
       })
@@ -88,6 +56,7 @@ export default function HomeSuperAdmin() {
   )
 
   const laters = currentScans.filter((item)=> item.late)
+  const complateScan = currentScans.filter((item)=> item.complate)
 
   console.log("scansToday", currentScans);
   
@@ -143,7 +112,7 @@ export default function HomeSuperAdmin() {
       </div>
       <div>
         <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Complete Scans</p>
-        <h3 className="text-2xl font-bold text-zinc-800 dark:text-white"> { 0} </h3>
+        <h3 className="text-2xl font-bold text-zinc-800 dark:text-white"> { complateScan.length || 0} </h3>
       </div>
     </div>
 

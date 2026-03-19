@@ -17,6 +17,7 @@ export default function ScanSuperAdmin() {
   const timesheetMutation = useMutation({
     mutationFn: (e) => createTimeSheetApi(e),
     onSuccess: (data, variable, context) => {
+      console.log('datttt', data);
       queryClient.setQueryData(["employees"], (oldData)=>{
         const employees = oldData?.employees?.map((employee)=>{
           if(employee.email == variable.email && employee.name == variable.name){
