@@ -54,24 +54,38 @@ class TimesheetContoller extends Controller
                 $timesheet = TimeSheet::where('user_id', $user->id)
                     ->whereDate('created_at', now()->format('Y-m-d'))
                     ->first();
+
                 if (!$timesheet) {
                     $user->load('employee.post');
-                    $post = $user->employee->post;
-
-                    $arrivalTimePost = Carbon::parse($post->arrivalTime);
-
-                    $diffByMinutes = now()->diffInMinutes($arrivalTimePost, false);
+                    $user->load('exceptionalTimes');
+                    $existsExpTime = false;
+                    $diffByMinutes = 0;
 
                     $timesheetData = [
                         'user_id' => $user->id,
                         'arrivalTime' => now()
                     ];
+                    
+                    foreach($user->exceptionalTimes as $expTime){
+                        if(now()->dayName == $expTime->dayName){
+                            $diffByMinutes = now()->diffInMinutes($expTime->arrivalTime, false);
+
+                            $existsExpTime = true;
+                        }
+                    }
+
+                    if($existsExpTime){
+                        $post = $user->employee->post;
+                        $arrivalTimePost = Carbon::parse($post->arrivalTime);
+                        $diffByMinutes = now()->diffInMinutes($arrivalTimePost, false);
+                    }
+
+                    
 
                     if($diffByMinutes < -15){
                         $timesheetData['late'] = true;
                     }
                     
-
                     $newTimeSheet = TimeSheet::create($timesheetData);
 
                     return response()->json([
