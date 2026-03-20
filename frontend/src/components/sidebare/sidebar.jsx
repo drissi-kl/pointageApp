@@ -103,7 +103,7 @@ export default function Sidebar({user}) {
         </nav>
 
         <div className="mt-6">
-            <button className="flex items-center w-full p-2 text-sm transition-colors duration-200 transform rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 group focus:outline-none">
+            <button onClick={()=>dispatch(changePage('profile'))} className="flex items-center w-full p-2 text-sm transition-colors duration-200 transform rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 group focus:outline-none">
                 <img className="object-cover w-10 h-10 rounded-full" src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="avatar" />
                 <div className="flex-1 ml-3 text-left">
                     <h2 className="text-sm font-semibold text-zinc-700 dark:text-zinc-200">{ user && user.email.slice(0,18)}...</h2>

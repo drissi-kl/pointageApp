@@ -10,6 +10,7 @@ import ReportsSuperAdmin from '../superadmin/reportsSuperAdmin';
 import { useQuery } from '@tanstack/react-query';
 import { currentUserApi } from '@/services/authService';
 import PostsSuperAdmin from '../superadmin/postsSuperAdmin';
+import ProfileSuperAdmin from '../superadmin/profileSuperAdmin';
 
 export default function Dashboard() {
 
@@ -40,11 +41,11 @@ export default function Dashboard() {
                 {
                     data.user.role == 'superadmin' ? (
                         page =='home'? <HomeSuperAdmin />
-                        :page =='admins'? <AdminSuperAdmin />
                         :page =='employees'? <EmployeeSuperAdmin />
                         :page =='scans'? <ScanSuperAdmin />
                         :page == 'posts'? <PostsSuperAdmin />
                         :page == 'reports'? <ReportsSuperAdmin />
+                        :page == 'profile'? <ProfileSuperAdmin />
                         :null
                     )
 
