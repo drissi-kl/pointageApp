@@ -24,7 +24,7 @@ Route::controller(AuthController::class)->group(function(){
 Route::middleware(["auth:sanctum"])->controller( AuthController::class)->group(function(){
     Route::get("/currentUser",  "currentUser");
     Route::post("/logout", "logout");
-    Route::middleware(["createAdminOrEmp"])->post('/store', "store");
+    // Route::middleware(["createAdminOrEmp"])->post('/store', "store");
 });
 // ## end auth routes ##
 

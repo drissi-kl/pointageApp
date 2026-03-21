@@ -1,10 +1,15 @@
-import { currentUserApi } from '@/services/authService'
-import { useQuery } from '@tanstack/react-query'
+import { currentUserApi, logoutApi } from '@/services/authService'
+import { changePage } from '@/store/slicePage';
+import getToken from '@/utilities/getToken';
+import { useMutation, useQuery } from '@tanstack/react-query'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 export default function ProfileSuperAdmin() {
-
+    
+    const navigate = useNavigate()
     const [updateProfile, setUpdateProfile] = useState(false);
 
     const { data: activeUser, isLoading: loadingActiveUser } = useQuery({
@@ -20,7 +25,19 @@ export default function ProfileSuperAdmin() {
     }
 
 
-    console.log('active user', activeUser)
+
+    // logout logic
+    const logoutMutation = useMutation({
+        mutationFn: () => logoutApi(),
+        onSuccess: (data, variable, context) => {
+            if(data.status == "success"){
+                const token = getToken();
+                document.cookie = `token=${token}; max-age=0`;
+                navigate('/');
+            }
+        }
+    })
+
 
 
     if (loadingActiveUser) {
@@ -33,7 +50,7 @@ export default function ProfileSuperAdmin() {
     return <main className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 p-6 transition-colors duration-300">
         {/* زر تسجيل الخروج في الأعلى */}
         <div className="flex justify-end max-w-2xl mx-auto mb-4">
-            <button className="px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/50 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors">
+            <button onClick={()=>{logoutMutation.mutate()}} className="px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/50 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors">
                 Logout
             </button>
         </div>

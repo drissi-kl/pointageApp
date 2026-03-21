@@ -71,6 +71,20 @@ const ResetPasswordApi = async (body)=>{
 }
 
 
+const logoutApi = async () =>{
+    try{
+        const response = await baseApi.post('/logout');
+        return response.data; 
+
+    }catch(error){
+        if(axios.isAxiosError(error)){
+            throw error;
+        }
+        throw new Error('exists error from logout function')
+    }
+}
+
+
 const currentUserApi = async () =>{
     try{
         const response = await baseApi.get('/currentUser');
@@ -85,7 +99,7 @@ const currentUserApi = async () =>{
 }
 
 
-export { loginApi, RegisterApi, StoreApi, currentUserApi, ForgetPasswordApi, ResetPasswordApi };
+export { loginApi, logoutApi, RegisterApi, StoreApi, currentUserApi, ForgetPasswordApi, ResetPasswordApi };
 
 
 
