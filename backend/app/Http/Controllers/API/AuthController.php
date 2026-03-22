@@ -155,13 +155,18 @@ class AuthController extends Controller
 
             if(!Hash::check($formFields['password'], $user->password)){
                 return [
-                    'status' => "fail",
+                    "status" => "fail",
                     "message" => "password not correct !!"
                 ];  
             }
 
+            $oldPassword = $user->password;
+
+            $user->fill($formFields);
+
             if($formFields['newPassword'] ){
                 if(($formFields['newPassword'] != $formFields["repeatNewPassword"])){
+                    $user->password = $oldPassword;
                     return [
                         'status' => "fail",
                         "message" => "passwords not matchs, check them!!"
@@ -172,7 +177,7 @@ class AuthController extends Controller
             }
 
             
-            $user->fill($formFields);
+            
             $user->save();
 
             return [

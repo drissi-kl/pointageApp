@@ -26,7 +26,7 @@ export default function ProfileSuperAdmin() {
     const updateProfileMutation = useMutation({
         mutationFn: (e) => updateUserApi(e),
         onSuccess: (data, variable, context) => {
-            console.log(data);
+            console.log("data", data);
             if(data.status == 'success'){
                 setUpdateProfile(false);
                 queryClient.setQueryData(['activeUser'], (oldData)=>{
