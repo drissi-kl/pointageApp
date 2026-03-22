@@ -44,6 +44,19 @@ const StoreApi = async (body)=>{
     }
 }
 
+const updateUserApi = async (body) =>{
+    try{
+        const response = await baseApi.post('/update', body);
+        return response.data; 
+
+    }catch(error){
+        if(axios.isAxiosError(error)){
+            throw error;
+        }
+        throw new Error('exists error from updateUserApi function')
+    }
+}
+
 const ForgetPasswordApi = async (body)=>{
     try{
         const response = await baseApi.post(`/forgetPassword`, body);
@@ -99,7 +112,7 @@ const currentUserApi = async () =>{
 }
 
 
-export { loginApi, logoutApi, RegisterApi, StoreApi, currentUserApi, ForgetPasswordApi, ResetPasswordApi };
+export { loginApi, logoutApi, RegisterApi, StoreApi, updateUserApi, currentUserApi, ForgetPasswordApi, ResetPasswordApi };
 
 
 

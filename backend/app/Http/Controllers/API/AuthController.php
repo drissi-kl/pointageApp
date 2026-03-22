@@ -139,9 +139,54 @@ class AuthController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request,)
     {
-        //
+        try{
+            $user = $request->user();
+
+            if(!$user){
+                return [
+                    'status' => "fail",
+                    "message" => "not exists any user logged"
+                ]; 
+            }
+
+            $formFields = $request->all();
+
+            if(!Hash::check($formFields['password'], $user->password)){
+                return [
+                    'status' => "fail",
+                    "message" => "password not correct !!"
+                ];  
+            }
+
+            if($formFields['newPassword'] ){
+                if(($formFields['newPassword'] != $formFields["repeatNewPassword"])){
+                    return [
+                        'status' => "fail",
+                        "message" => "passwords not matchs, check them!!"
+                    ];  
+                }
+
+                $user->password = Hash::make($formFields['newPassword']);
+            }
+
+            
+            $user->fill($formFields);
+            $user->save();
+
+            return [
+                'status' => "success",
+                "message" => "update user done successful",
+                "user" => $user
+            ];
+
+        }catch(Exception $e){
+            return [
+                'status' => "error",
+                "message" => $e->getMessage()
+            ];
+        }
     }
 
     /**

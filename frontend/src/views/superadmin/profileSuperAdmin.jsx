@@ -1,7 +1,7 @@
-import { currentUserApi, logoutApi } from '@/services/authService'
+import { currentUserApi, logoutApi, updateUserApi } from '@/services/authService'
 import { changePage } from '@/store/slicePage';
 import getToken from '@/utilities/getToken';
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
@@ -17,11 +17,32 @@ export default function ProfileSuperAdmin() {
         queryFn: currentUserApi
     })
 
-    const { register, handleSubmit, formState } = useForm()
+    const { register, handleSubmit, formState, getValues, reset } = useForm()
     const { errors } = formState;
 
+    const queryClient = useQueryClient();
+
+
+    const updateProfileMutation = useMutation({
+        mutationFn: (e) => updateUserApi(e),
+        onSuccess: (data, variable, context) => {
+            console.log(data);
+            if(data.status == 'success'){
+                setUpdateProfile(false);
+                queryClient.setQueryData(['activeUser'], (oldData)=>{
+                    return {...oldData, user: data.user}
+                })
+            }
+
+            reset();
+
+        }
+    })
+
     const updateProfileForm = (e) => {
-        console.log("update profile", e)
+        updateProfileMutation.mutate(e);
+        // console.log('data', e);
+        
     }
 
 
@@ -48,7 +69,6 @@ export default function ProfileSuperAdmin() {
 
 
     return <main className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 p-6 transition-colors duration-300">
-        {/* زر تسجيل الخروج في الأعلى */}
         <div className="flex justify-end max-w-2xl mx-auto mb-4">
             <button onClick={()=>{logoutMutation.mutate()}} className="px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/50 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors">
                 Logout
@@ -141,9 +161,17 @@ export default function ProfileSuperAdmin() {
                                 <input
                                     type="password"
                                     placeholder='repeat your new password if you want to change that'
-                                    {...register('repeatPassword')}
+                                    {...register('repeatNewPassword', {
+                                        validate: (input) => {
+                                            const newPassword = getValues('newPassword');
+                                            if(input != newPassword) {
+                                                return "passwords not matchs, check them";
+                                            }
+                                        }
+                                    })}
                                     className="w-full p-4 rounded-2xl bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-100 focus:outline-none transition-all dark:text-white"
                                 />
+                                {errors.repeatNewPassword && <p className='text-red-500 text-sm mt-2'>{errors.repeatNewPassword.message}</p>}
                             </div>
 
                             <div className="flex flex-col">
@@ -162,11 +190,10 @@ export default function ProfileSuperAdmin() {
                             </div>
                         </div>
 
-                        {/* أزرار التحكم */}
                         <div className="flex gap-3 pt-2">
                             <button
                                 type="button"
-                                onClick={() => setUpdateProfile(false)}
+                                onClick={() => {setUpdateProfile(false); reset()}}
                                 className="flex-1 py-4 bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 font-bold rounded-2xl hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-all"
                             >
                                 Cancel
